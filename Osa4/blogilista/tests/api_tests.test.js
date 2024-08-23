@@ -65,7 +65,7 @@ test("The Likes of a blog can be changed", async () => {
   const allBlogsBefore = await api.get("/api/blogs");
   const blogToBeModified = allBlogsBefore.body[0]; //has 7 likes
   await api
-    .patch(`/api/blogs/${blogToBeModified._id}`)
+    .put(`/api/blogs/${blogToBeModified._id}`)
     .send({ likes: 12 })
     .expect(200);
   const modifiedBlog = await api.get(`/api/blogs/${blogToBeModified._id}`);
