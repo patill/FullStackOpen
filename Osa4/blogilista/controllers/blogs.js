@@ -17,15 +17,6 @@ blogRouter.get("/:id", async (request, response, next) => {
   }
 });
 
-const getTokenFrom = (request) => {
-  const authorization = request.get("Authorization");
-
-  if (authorization && authorization.toLowerCase().startsWith("bearer ")) {
-    return authorization.substring(7);
-  }
-  return null;
-};
-
 blogRouter.post("/", async (request, response, next) => {
   try {
     const { title, author, url, likes } = request.body;
@@ -48,8 +39,22 @@ blogRouter.post("/", async (request, response, next) => {
 
 blogRouter.delete("/:id", async (request, response, next) => {
   try {
-    await Blog.findByIdAndRemove(request.params.id);
-    response.status(204).end();
+    const decodedToken = jwt.verify(request.token, process.env.JWT_SECRET);
+
+    if (!request.token || !decodedToken) {
+      return response.status(401).json({ error: "token missing or invalid" });
+    }
+    const user = await User.findById(decodedToken.id);
+    console.log(user.id);
+
+    const blogToBeRemoved = await Blog.findById(request.params.id);
+    const blogUserId = blogToBeRemoved.user;
+    if (blogToBeRemoved.user.valueOf() === user.id) {
+      await Blog.findByIdAndRemove(request.params.id);
+      response.status(204).end();
+    } else {
+      response.status(401).end();
+    }
   } catch (error) {
     next(error);
   }
