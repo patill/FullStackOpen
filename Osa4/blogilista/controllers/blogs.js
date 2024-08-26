@@ -29,11 +29,10 @@ const getTokenFrom = (request) => {
 blogRouter.post("/", async (request, response, next) => {
   try {
     const { title, author, url, likes } = request.body;
-    const token = getTokenFrom(request);
 
-    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+    const decodedToken = jwt.verify(request.token, process.env.JWT_SECRET);
 
-    if (!token || !decodedToken) {
+    if (!request.token || !decodedToken) {
       return response.status(401).json({ error: "token missing or invalid" });
     }
     const user = await User.findById(decodedToken.id);
