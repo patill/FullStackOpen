@@ -24,8 +24,18 @@ blogRouter.post("/", async (request, response, next) => {
     const user = request.user;
 
     if (user) {
-      const blog = new Blog({ title, author, url, likes, user: user._id });
-      const result = await blog.save();
+      const blog = new Blog({
+        title,
+        author,
+        url,
+        likes,
+        user: user._id,
+      });
+      await blog.save();
+      const result = await blog.populate("user", {
+        username: 1,
+        name: 1,
+      });
       (user.blogs = user.blogs.concat(result._id)), await user.save();
       response.status(201).json(result);
     } else response.status(401).json({ error: "Bad authentication" });
