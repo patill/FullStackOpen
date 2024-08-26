@@ -1,0 +1,47 @@
+.error {
+  color: red;
+  background: lightgrey;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+  max-width: 70%;
+}
+
+.notification {
+  color: green;
+  background: lightgrey;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+  max-width: 70%;
+}
+
+.blogentry {
+  border-style: solid;
+  border-color: gray;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.toggle {
+  display: inline;
+}
+
+.blogName {
+  display: inline;
+}
+
+.formdiv {
+  max-width: 40%;
+  border-style: solid;
+  border-color: gray;
+  padding: 15px;
+}
+
+.remove {
+  color: red;
+}
