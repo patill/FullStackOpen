@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const supertest = require("supertest");
+const config = require("../utils/config");
 const helper = require("../utils/test_helper");
 const app = require("../app");
 const Blog = require("../models/Blog");
@@ -30,10 +31,15 @@ test("A blog can be added", async () => {
     author: "Phantom",
     url: "http://example.com",
   });
+  console.log("The jwt for authorization is " + config.JWT_TEST);
 
   await api
     .post("/api/blogs")
+    .set("Authorization", `Bearer ${config.JWT_TEST}`)
     .send(blog)
+    .expect(({ request }) => {
+      console.log(request.header);
+    })
     .expect(201)
     .expect("Content-Type", /application\/json/);
 
@@ -54,7 +60,13 @@ test("Api returns one blog", async () => {
 test("A blog can be deleted", async () => {
   const allBlogsBefore = await api.get("/api/blogs");
   const noteToBeDeleted = allBlogsBefore.body[0];
-  await api.delete(`/api/blogs/${noteToBeDeleted._id}`).expect(204);
+  await api
+    .delete(`/api/blogs/${noteToBeDeleted._id}`)
+    .set("Authorization", `Bearer ${config.JWT_TEST}`)
+    .expect(({ request }) => {
+      console.log(request.header);
+    })
+    .expect(204);
   const allBlogsAfter = await api.get("/api/blogs");
   expect(allBlogsBefore.body).toHaveLength(allBlogsAfter.body.length + 1);
 
@@ -63,12 +75,15 @@ test("A blog can be deleted", async () => {
 
 test("The Likes of a blog can be changed", async () => {
   const allBlogsBefore = await api.get("/api/blogs");
-  const blogToBeModified = allBlogsBefore.body[0]; //has 7 likes
+  const idToBeModified = allBlogsBefore.body[0]._id;
   await api
-    .put(`/api/blogs/${blogToBeModified._id}`)
+    .patch(`/api/blogs/${idToBeModified}`)
+    .set("Authorization", `Bearer ${config.JWT_TEST}`)
     .send({ likes: 12 })
     .expect(200);
-  const modifiedBlog = await api.get(`/api/blogs/${blogToBeModified._id}`);
+  const modifiedBlog = await api.get(`/api/blogs/${idToBeModified}`);
+  console.log("From likes test: modified blog");
+
   expect(modifiedBlog.body.likes).toEqual(12);
 });
 

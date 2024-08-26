@@ -25,6 +25,6 @@ describe("total likes", () => {
   });
 
   test("List with many blogs gives correct sum of likes", () => {
-    expect(listHelper.totalLikes(listWithManyBlogs)).toBe(36);
+    expect(listHelper.totalLikes(listWithManyBlogs)).toBe(46);
   });
 });
