@@ -8,8 +8,11 @@ blogRouter.get("/", async (request, response) => {
 
 blogRouter.get("/:id", async (request, response, next) => {
   try {
-    const blog = await Blog.findById(request.params.id);
-    response.json(blog).populate("user", { username: 1, name: 1 });
+    const blog = await Blog.findById(request.params.id).populate("user", {
+      username: 1,
+      name: 1,
+    });
+    response.json(blog);
   } catch (error) {
     next(error);
   }
