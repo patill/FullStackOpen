@@ -1,7 +1,5 @@
 const blogRouter = require("express").Router();
 const Blog = require("../models/Blog");
-const User = require("../models/User");
-const jwt = require("jsonwebtoken");
 
 blogRouter.get("/", async (request, response) => {
   const blogs = await Blog.find({}).populate("user", { username: 1, name: 1 });
@@ -20,18 +18,14 @@ blogRouter.get("/:id", async (request, response, next) => {
 blogRouter.post("/", async (request, response, next) => {
   try {
     const { title, author, url, likes } = request.body;
+    const user = request.user;
 
-    const decodedToken = jwt.verify(request.token, process.env.JWT_SECRET);
-
-    if (!request.token || !decodedToken) {
-      return response.status(401).json({ error: "token missing or invalid" });
-    }
-    const user = await User.findById(decodedToken.id);
-    const blog = new Blog({ title, author, url, likes, user: user._id });
-    const result = await blog.save();
-
-    (user.blogs = user.blogs.concat(result._id)), await user.save();
-    response.status(201).json(result);
+    if (user) {
+      const blog = new Blog({ title, author, url, likes, user: user._id });
+      const result = await blog.save();
+      (user.blogs = user.blogs.concat(result._id)), await user.save();
+      response.status(201).json(result);
+    } else response.status(401).json({ error: "Bad authentication" });
   } catch (error) {
     next(error);
   }
@@ -39,16 +33,15 @@ blogRouter.post("/", async (request, response, next) => {
 
 blogRouter.delete("/:id", async (request, response, next) => {
   try {
-    const decodedToken = jwt.verify(request.token, process.env.JWT_SECRET);
-
-    if (!request.token || !decodedToken) {
-      return response.status(401).json({ error: "token missing or invalid" });
-    }
-    const user = await User.findById(decodedToken.id);
+    const user = request.user;
 
     const blogToBeRemoved = await Blog.findById(request.params.id);
     if (blogToBeRemoved) {
-      if (blogToBeRemoved.user && blogToBeRemoved.user.valueOf() === user.id) {
+      if (
+        user &&
+        blogToBeRemoved.user &&
+        blogToBeRemoved.user.valueOf() === user.id
+      ) {
         await Blog.findByIdAndRemove(request.params.id);
         response.status(204).end();
       } else {
