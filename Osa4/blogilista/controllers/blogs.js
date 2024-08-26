@@ -58,14 +58,19 @@ blogRouter.delete("/:id", async (request, response, next) => {
 
 blogRouter.patch("/:id", async (request, response, next) => {
   try {
-    const blogToBeChanged = request.body;
-    console.log(blogToBeChanged);
+    const user = request.user;
 
-    const result = await Blog.findByIdAndUpdate(
-      request.params.id,
-      blogToBeChanged
-    );
-    response.json(result);
+    const blogToBeChanged = await Blog.findById(request.params.id);
+    blogToBeChanged.likes = request.body.likes;
+    console.log(blogToBeChanged);
+    if (user && user.id === blogToBeChanged.user.valueOf()) {
+      const result = await Blog.findByIdAndUpdate(
+        request.params.id,
+        blogToBeChanged,
+        { returnDocument: "after" }
+      );
+      response.json(result);
+    } else response.status(401).end();
   } catch (error) {
     next(error);
   }
