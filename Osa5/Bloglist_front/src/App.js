@@ -87,11 +87,15 @@ const App = () => {
         //.sort((a, b) => a.likes + b.likes)
         .map((blog) => (blog._id !== updatedBlog._id ? blog : updatedBlog))
     );
+    setNotification("The blog entry has been modified successfully.");
+    setTimeout(() => setNotification(null), 5000);
   };
 
   const remove = async (id) => {
     //console.log(id);
     await blogService.remove(id);
+    setNotification("The blog entry has been removed successfully.");
+    setTimeout(() => setNotification(null), 5000);
     //need to update list here, sort again
     setBlogs(blogs.filter((blog) => blog._id !== id));
   };
@@ -101,7 +105,7 @@ const App = () => {
   }
   return (
     <div>
-      <h2>blogs</h2>
+      <h1>Blogs</h1>
       <Notification classname="error" message={errorMessage} />
       <Notification classname="notification" message={notification} />
       <p>
@@ -110,6 +114,12 @@ const App = () => {
           logout
         </button>
       </p>
+      <div className="formdiv">
+        <Togglable buttonLabel="Post a new blog" ref={toggleBlogForm}>
+          <AddBlogForm saveBlog={postBlog} />
+        </Togglable>
+      </div>
+
       {blogs
         //.sort((a, b) => b.likes - a.likes)
         .map((blog) => (
@@ -121,12 +131,6 @@ const App = () => {
             handleRemoveBlog={remove}
           />
         ))}
-
-      <div className="formdiv">
-        <Togglable buttonLabel="Post a new blog" ref={toggleBlogForm}>
-          <AddBlogForm saveBlog={postBlog} />
-        </Togglable>
-      </div>
     </div>
   );
 };
