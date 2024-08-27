@@ -23,6 +23,7 @@ const listWithManyBlogs = [
     author: "Edsger W. Dijkstra",
     url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html",
     likes: 22,
+    user: "66cc583a9195d1e7366e18bf",
     __v: 0,
   },
   {
@@ -31,6 +32,7 @@ const listWithManyBlogs = [
     author: "Robert C. Martin",
     url: "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll",
     likes: 10,
+    user: "66cc583a9195d1e7366e18bf",
     __v: 0,
   },
   {
@@ -39,6 +41,7 @@ const listWithManyBlogs = [
     author: "Robert C. Martin",
     url: "http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html",
     likes: 0,
+    user: "66cc583a9195d1e7366e18bf",
     __v: 0,
   },
   {
@@ -47,6 +50,7 @@ const listWithManyBlogs = [
     author: "Robert C. Martin",
     url: "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
     likes: 2,
+    user: "66cc583a9195d1e7366e18bf",
     __v: 0,
   },
 ];
