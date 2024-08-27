@@ -35,17 +35,17 @@ const Blog = ({ user, blog, handleUpdateBlog, handleRemoveBlog }) => {
       <Togglable buttonLabel="show">
         <div>
           <h3 className="blog-author">Author: {blog.author}</h3>
-          <p>
+          <p className="blog-url">
             URL: <a href={blog.url}>{blog.url}</a>
           </p>
-          <div>
+          <div className="blog-likes">
             likes: {blog.likes ? blog.likes : 0}
             {"  "}
             <button onClick={handleLike} type="submit">
               like
             </button>
           </div>
-          <p>Lisääjä: {blog.user.name}</p>
+          <p className="blog-username">Lisääjä: {blog.user.name}</p>
           {currentUser.username === blogUserName ? (
             <div>
               <button className="remove" onClick={handleRemove} type="submit">

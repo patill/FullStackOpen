@@ -11,7 +11,10 @@ describe("testing blog", () => {
     const blog = {
       title: "The newest achievements in testing",
       author: "Conal Clarke",
+      url: "www.fine.com",
+      likes: 5,
       user: {
+        name: "Testuser",
         id: 1,
       },
     };
@@ -39,6 +42,21 @@ describe("testing blog", () => {
     expect(title).toBeDefined();
     expect(title).toHaveTextContent("The newest achievements in testing");
     expect(author).toHaveTextContent("Conal Clarke");
+  });
+
+  test("blog entry shows also URL, likes and username, when opened", async () => {
+    const button = screen.getByText("show");
+    const user = userEvent.setup();
+
+    await user.click(button);
+    const url = container.querySelector(".blog-url");
+    const likes = container.querySelector(".blog-likes");
+    const bloguser = container.querySelector(".blog-username");
+
+    expect(url).toBeDefined();
+    expect(url).toHaveTextContent("www.fine.com");
+    expect(likes).toHaveTextContent("likes: 5");
+    expect(bloguser).toHaveTextContent("Testuser");
   });
 
   test("like can be clicked two times", async () => {
