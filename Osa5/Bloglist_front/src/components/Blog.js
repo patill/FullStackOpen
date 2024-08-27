@@ -45,6 +45,7 @@ const Blog = ({ user, blog, handleUpdateBlog, handleRemoveBlog }) => {
               like
             </button>
           </div>
+          <p>Lisääjä: {blog.user.name}</p>
           {currentUser.username === blogUserName ? (
             <div>
               <button className="remove" onClick={handleRemove} type="submit">
