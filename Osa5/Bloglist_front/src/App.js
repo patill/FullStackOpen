@@ -81,14 +81,19 @@ const App = () => {
   };
 
   const handleUpdateBlog = async (changedBlog) => {
-    const updatedBlog = await blogService.update(changedBlog);
-    setBlogs(
-      blogs
-        //.sort((a, b) => a.likes + b.likes)
-        .map((blog) => (blog._id !== updatedBlog._id ? blog : updatedBlog))
-    );
-    setNotification("The blog entry has been modified successfully.");
-    setTimeout(() => setNotification(null), 5000);
+    try {
+      const updatedBlog = await blogService.update(changedBlog);
+      setBlogs(
+        blogs
+          //.sort((a, b) => a.likes + b.likes)
+          .map((blog) => (blog._id !== updatedBlog._id ? blog : updatedBlog))
+      );
+      setNotification("The blog entry has been modified successfully.");
+      setTimeout(() => setNotification(null), 5000);
+    } catch (error) {
+      setErrorMessage("Someting went wrong, try again");
+      setTimeout(() => setErrorMessage(null), 5000);
+    }
   };
 
   const remove = async (id) => {

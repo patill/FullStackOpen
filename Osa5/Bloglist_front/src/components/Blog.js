@@ -3,10 +3,10 @@ import Togglable from "./Togglable";
 import PropTypes from "prop-types";
 
 const Blog = ({ user, blog, handleUpdateBlog, handleRemoveBlog }) => {
-  const [updatedBlog, setBlog] = useState(blog);
-  const [userId, setUserId] = useState(blog.user.id);
-  const [blogUserName, setuserName] = useState(blog.user.username);
-  const [currentUser, setUser] = useState(user);
+  const [updatedBlog] = useState(blog);
+  const [userId] = useState(blog.user.id);
+  const [blogUserName] = useState(blog.user.username);
+  const [currentUser] = useState(user);
 
   const handleLike = async (event) => {
     event.preventDefault();
@@ -39,7 +39,7 @@ const Blog = ({ user, blog, handleUpdateBlog, handleRemoveBlog }) => {
             URL: <a href={blog.url}>{blog.url}</a>
           </p>
           <div>
-            likes: {blog.likes}
+            likes: {blog.likes ? blog.likes : 0}
             {"  "}
             <button onClick={handleLike} type="submit">
               like
