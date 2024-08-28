@@ -113,7 +113,7 @@ describe("Blog app", () => {
         cy.contains("The blog entry has been removed successfully");
       });
 
-      it.only("The user cannot see the remove button of an entry she has not added", function () {
+      it("The user cannot see the remove button of an entry she has not added", function () {
         let token;
         cy.request("POST", "http://localhost:3003/api/login", {
           username: "notTest",
@@ -138,6 +138,13 @@ describe("Blog app", () => {
           .parent()
           .should("not.contain", "Remove")
           .and("contain", "Testuser2");
+      });
+
+      it.only("The blogs are ordered in descending order by their likes", function () {
+        cy.get(".blogentry")
+          .eq(0)
+          .should("contain", "Canonical string reduction");
+        cy.get(".blogentry").eq(1).should("contain", "First class tests");
       });
     });
   });
