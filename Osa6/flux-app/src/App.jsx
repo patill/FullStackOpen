@@ -1,6 +1,29 @@
 //import React from "react";
-import store from "./reducer/noteReducer.js";
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import noteReducer from "./reducer/noteReducer.js";
+import { createStore } from "redux";
 import "./App.css";
+
+const store = createStore(noteReducer);
+
+store.dispatch({
+  type: "NEW_NOTE",
+  payload: {
+    content: "the app state is in redux store",
+    important: true,
+    id: 1,
+  },
+});
+
+store.dispatch({
+  type: "NEW_NOTE",
+  payload: {
+    content: "state changes are made with actions",
+    important: false,
+    id: 2,
+  },
+});
 
 const App = () => {
   return (
@@ -19,4 +42,15 @@ const App = () => {
 
 //const root = ReactDOM.createRoot(document.getElementById("root"));
 
-export default App;
+const root = createRoot(document.getElementById("root"));
+
+const renderApp = () => {
+  root.render(
+    <StrictMode>
+      <App />
+    </StrictMode>
+  );
+};
+
+renderApp();
+store.subscribe(renderApp);
