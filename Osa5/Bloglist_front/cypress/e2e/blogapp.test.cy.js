@@ -27,7 +27,14 @@ describe("Blog app", () => {
       username: "test",
       password: "ValidationPassword",
     };
+    const user2 = {
+      _id: "66cc583a9195d1e7366e18ba",
+      name: "Testuser2",
+      username: "notTest",
+      password: "ValidationPassword",
+    };
     cy.request("POST", `${Cypress.env("BACKEND")}/users`, user);
+    cy.request("POST", `${Cypress.env("BACKEND")}/users`, user2);
     cy.visit("http://localhost:3000");
   });
 
@@ -87,6 +94,50 @@ describe("Blog app", () => {
       });
       it("one blog has the name Go To Statement Considered Harmful", function () {
         cy.contains("Go To Statement Considered Harmful");
+      });
+
+      it("The user can click the like button", function () {
+        cy.contains("TDD harms architecture").as("blogentry");
+        cy.get("@blogentry").parent().contains("show").click();
+        cy.get("@blogentry").parent().find(".blog-likes").as("likes");
+        cy.get("@likes").find("button").click();
+
+        cy.contains("TDD harms architecture").as("updatedEntry");
+        cy.get("@updatedEntry").parent().contains("likes: 1");
+      });
+
+      it("The user who added a blog can also remove it", function () {
+        cy.contains("TDD harms architecture").as("blogentry");
+        cy.get("@blogentry").parent().contains("show").click();
+        cy.get("@blogentry").parent().contains("Remove").click();
+        cy.contains("The blog entry has been removed successfully");
+      });
+
+      it.only("The user cannot see the remove button of an entry she has not added", function () {
+        let token;
+        cy.request("POST", "http://localhost:3003/api/login", {
+          username: "notTest",
+          password: "ValidationPassword",
+        })
+          .then((response) => {
+            token = response.body;
+            console.log(token.token);
+          })
+          .then(() => {
+            const entry = {
+              title: "Another blog list entry",
+              author: "Mick Jagger",
+              likes: 100,
+            };
+            cy.createBlog(entry, token.token);
+          });
+        cy.visit("http://localhost:3000");
+
+        cy.contains("Another blog list entry").as("entry");
+        cy.get("@entry")
+          .parent()
+          .should("not.contain", "Remove")
+          .and("contain", "Testuser2");
       });
     });
   });
