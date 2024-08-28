@@ -39,6 +39,14 @@ describe("Blog app", () => {
     cy.get("#username").type("test");
     cy.get("#password").type("ValidationPassword");
     cy.get("button").click();
+    cy.contains("Blogs");
+  });
+
+  it("Wrong user credentials dont log user in", function () {
+    cy.get("#username").type("test2");
+    cy.get("#password").type("Validation");
+    cy.get("button").click();
+    cy.contains("wrong credentials");
   });
 
   describe("When user is logged in", function () {
