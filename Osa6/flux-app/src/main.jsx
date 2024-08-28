@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import store from "./reducer.js";
+import store from "./reducer/countReducer.js";
 import App from "./App.jsx";
 import "./index.css";
 
