@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const Note = require("../models/Blog");
+const Blog = require("../models/Blog");
 const User = require("../models/User");
 
 router.post("/reset", async (request, response) => {
