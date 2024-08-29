@@ -20,7 +20,14 @@ Anecdote.propTypes = {
 
 const AnecdoteList = () => {
   const dispatch = useDispatch();
-  const anecdotes = useSelector((state) => state);
+  const anecdotes = useSelector((state) => {
+    if (state.filter.length > 0) {
+      return state.anecdotes.filter((anecdote) =>
+        anecdote.content.includes(state.filter)
+      );
+    }
+    return state.anecdotes;
+  });
 
   return (
     <div>
