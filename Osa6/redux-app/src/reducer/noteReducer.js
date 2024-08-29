@@ -1,3 +1,5 @@
+import { createSlice } from "@reduxjs/toolkit";
+
 const initialState = [
   {
     content: "reducer defines how redux store works",
@@ -11,44 +13,68 @@ const initialState = [
   },
 ];
 
-const noteReducer = (state = initialState, action) => {
-  switch (action.type) {
-    case "NEW_NOTE":
-      return [...state, action.payload];
+const generateId = () => Number((Math.random() * 1000000).toFixed(0));
 
-    case "TOGGLE_IMPORTANCE": {
-      const id = action.payload.id;
+const noteSlice = createSlice({
+  name: "notes",
+  initialState,
+  reducers: {
+    createNote(state, action) {
+      const content = action.payload;
+      state.push({ content, important: false, id: generateId() });
+    },
+    toggleImportanceOf(state, action) {
+      const id = action.payload;
+      //console.log(JSON.parse(JSON.stringify(state)));
       const noteToChange = state.find((n) => n.id === id);
+
       const changedNote = {
         ...noteToChange,
         important: !noteToChange.important,
       };
       return state.map((note) => (note.id !== id ? note : changedNote));
-    }
-    default:
-      return state;
-  }
-};
+    },
+  },
+});
+
+export const { createNote, toggleImportanceOf } = noteSlice.actions;
+export default noteSlice.reducer;
+
+// const noteReducer = (state = initialState, action) => {
+//   switch (action.type) {
+//     case "NEW_NOTE":
+//       return [...state, action.payload];
+
+//     case "TOGGLE_IMPORTANCE": {
+//       const id = action.payload.id;
+//       const noteToChange = state.find((n) => n.id === id);
+//       const changedNote = {
+//         ...noteToChange,
+//         important: !noteToChange.important,
+//       };
+//       return state.map((note) => (note.id !== id ? note : changedNote));
+//     }
+//     default:
+//       return state;
+//   }
+// };
 
 //Action creators:
-export const createNote = (content) => {
-  const newNote = {
-    type: "NEW_NOTE",
-    payload: {
-      content,
-      important: false,
-      id: generateId(),
-    },
-  };
-  return newNote;
-};
+// const createNote = (content) => {
+//   const newNote = {
+//     type: "NEW_NOTE",
+//     payload: {
+//       content,
+//       important: false,
+//       id: generateId(),
+//     },
+//   };
+//   return newNote;
+// };
 
-export const toggleImportanceOf = (id) => {
-  return {
-    type: "TOGGLE_IMPORTANCE",
-    payload: { id },
-  };
-};
-
-const generateId = () => Number((Math.random() * 1000000).toFixed(0));
-export default noteReducer;
+// const toggleImportanceOf = (id) => {
+//   return {
+//     type: "TOGGLE_IMPORTANCE",
+//     payload: { id },
+//   };
+// };
