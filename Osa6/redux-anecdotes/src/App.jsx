@@ -1,15 +1,10 @@
 import { useSelector, useDispatch } from "react-redux";
+import { registerVote } from "./reducers/anecdoteReducer";
+import NewAnecdote from "./components/AddAnecdote";
 
 const App = () => {
   const anecdotes = useSelector((state) => state);
   const dispatch = useDispatch();
-
-  const registerVote = (id) => {
-    return {
-      type: "vote",
-      payload: { id },
-    };
-  };
 
   const vote = (id) => {
     console.log("vote", id);
@@ -19,6 +14,7 @@ const App = () => {
   return (
     <div>
       <h2>Anecdotes</h2>
+      <NewAnecdote />
       {anecdotes.map((anecdote) => (
         <div key={anecdote.id}>
           <div>{anecdote.content}</div>
