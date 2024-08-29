@@ -19,6 +19,7 @@ const asObject = (anecdote) => {
 
 const initialState = anecdotesAtStart.map(asObject);
 
+//Action creators
 export const registerVote = (id) => {
   return {
     type: "vote",
@@ -33,6 +34,7 @@ export const addAnecdote = (content) => {
   };
 };
 
+//main reducer
 const reducer = (state = initialState, action) => {
   console.log("state now: ", state);
   console.log("action", action);
