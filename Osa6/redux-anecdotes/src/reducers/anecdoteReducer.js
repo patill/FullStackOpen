@@ -1,3 +1,5 @@
+import { createSlice } from "@reduxjs/toolkit";
+
 const anecdotesAtStart = [
   "If it hurts, do it more often",
   "Adding manpower to a late software project makes it later!",
@@ -20,39 +22,61 @@ const asObject = (anecdote) => {
 const initialState = anecdotesAtStart.map(asObject);
 
 //Action creators
-export const registerVote = (id) => {
-  return {
-    type: "vote",
-    payload: { id },
-  };
-};
+// export const registerVote = (id) => {
+//   return {
+//     type: "vote",
+//     payload: { id },
+//   };
+// };
 
-export const addAnecdote = (content) => {
-  return {
-    type: "ADD",
-    payload: { content, votes: 0, id: getId() },
-  };
-};
+// export const addAnecdote = (content) => {
+//   return {
+//     type: "ADD",
+//     payload: { content, votes: 0, id: getId() },
+//   };
+// };
 
 //main reducer
-const reducer = (state = initialState, action) => {
-  console.log("state now: ", state);
-  console.log("action", action);
-  switch (action.type) {
-    case "vote": {
-      const id = action.payload.id;
-      console.log(id);
+// const reducer = (state = initialState, action) => {
+//   console.log("state now: ", state);
+//   console.log("action", action);
+//   switch (action.type) {
+//     case "vote": {
+//       const id = action.payload.id;
+//       console.log(id);
+//       const itemToChange = state.find((n) => n.id === id);
+//       const changedItem = { ...itemToChange, votes: itemToChange.votes + 1 };
+//       return state.map((anecdote) =>
+//         anecdote.id !== changedItem.id ? anecdote : changedItem
+//       );
+//     }
+//     case "ADD":
+//       return [...state, action.payload];
+//     default:
+//       return state;
+//   }
+// };
+
+// export default reducer;
+
+const anecdoteSlice = createSlice({
+  name: "anecdotes",
+  initialState,
+  reducers: {
+    addAnecdote(state, action) {
+      const content = action.payload;
+      state.push({ content, votes: 0, id: getId() });
+    },
+    registerVote(state, action) {
+      const id = action.payload;
       const itemToChange = state.find((n) => n.id === id);
       const changedItem = { ...itemToChange, votes: itemToChange.votes + 1 };
       return state.map((anecdote) =>
         anecdote.id !== changedItem.id ? anecdote : changedItem
       );
-    }
-    case "ADD":
-      return [...state, action.payload];
-    default:
-      return state;
-  }
-};
+    },
+  },
+});
 
-export default reducer;
+export const { addAnecdote, registerVote } = anecdoteSlice.actions;
+export default anecdoteSlice.reducer;

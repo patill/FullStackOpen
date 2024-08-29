@@ -22,11 +22,15 @@ const AnecdoteList = () => {
   const dispatch = useDispatch();
   const anecdotes = useSelector((state) => {
     if (state.filter.length > 0) {
-      return state.anecdotes.filter((anecdote) =>
-        anecdote.content.includes(state.filter)
-      );
+      const arr = new Array();
+      state.anecdotes
+        .filter((anecdote) => anecdote.content.includes(state.filter))
+        .forEach((a) => arr.push(a));
+      return arr;
     }
-    return state.anecdotes;
+    const arr = new Array();
+    state.anecdotes.forEach((a) => arr.push(a));
+    return arr;
   });
 
   return (
