@@ -15,15 +15,17 @@ const App = () => {
     <div>
       <h2>Anecdotes</h2>
       <NewAnecdote />
-      {anecdotes.map((anecdote) => (
-        <div key={anecdote.id}>
-          <div>{anecdote.content}</div>
-          <div>
-            has {anecdote.votes} votes.{" "}
-            <button onClick={() => vote(anecdote.id)}>vote</button>
+      {anecdotes
+        .sort((a, b) => b.votes - a.votes)
+        .map((anecdote) => (
+          <div key={anecdote.id}>
+            <div>{anecdote.content}</div>
+            <div>
+              has {anecdote.votes} votes.{" "}
+              <button onClick={() => vote(anecdote.id)}>vote</button>
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
       <h2>create new</h2>
       <form>
         <div>
