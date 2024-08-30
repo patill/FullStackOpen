@@ -5,6 +5,8 @@ import { configureStore } from "@reduxjs/toolkit";
 import App from "./App";
 import noteReducer from "./reducer/noteReducer";
 import filterReducer from "./reducer/filterReducer";
+//import noteService from "./services/notes";
+//import { setNotes } from "./reducer/noteReducer";
 
 const store = configureStore({
   reducer: {
@@ -13,6 +15,8 @@ const store = configureStore({
   },
 });
 console.log(store.getState());
+
+//noteService.getAll().then((notes) => store.dispatch(setNotes(notes)));
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
