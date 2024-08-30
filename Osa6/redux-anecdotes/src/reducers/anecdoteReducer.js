@@ -66,6 +66,7 @@ const anecdoteSlice = createSlice({
     addAnecdote(state, action) {
       const content = action.payload;
       state.push({ content, votes: 0, id: getId() });
+      console.log(JSON.parse(JSON.stringify(state)));
     },
     registerVote(state, action) {
       const id = action.payload;
