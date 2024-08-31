@@ -3,7 +3,7 @@
     {
       "content": "If it hurts, do it more often",
       "id": "47145",
-      "votes": 4
+      "votes": 5
     },
     {
       "content": "Adding manpower to a late software project makes it later!",
@@ -44,6 +44,21 @@
       "id": "ac7c",
       "content": "a new one",
       "votes": 0
+    },
+    {
+      "id": "7909",
+      "content": "Realizing the truth hurst, realizing to be wrong is just a coincidence.",
+      "votes": 2
+    },
+    {
+      "id": "20a7",
+      "content": "A new one three",
+      "votes": 0
+    },
+    {
+      "id": "9dde",
+      "content": "When the second argument is in the right place, the notification will stay for five seconds.",
+      "votes": 1
     }
   ]
 }

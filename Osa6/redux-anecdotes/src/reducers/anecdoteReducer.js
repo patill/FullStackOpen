@@ -49,4 +49,5 @@ export const addVote = (id) => {
     dispatch(registerVote(votedAnecdote.data));
   };
 };
+
 export default anecdoteSlice.reducer;
