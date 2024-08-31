@@ -5,7 +5,7 @@ const noteSlice = createSlice({
   name: "notes",
   initialState: [],
   reducers: {
-    createNote(state, action) {
+    appendNote(state, action) {
       state.push(action.payload);
     },
     toggleImportanceOf(state, action) {
