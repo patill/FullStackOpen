@@ -1,35 +1,35 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useReducer } from "react";
+
+import "./App.css";
+
+const counterReducer = (state, action) => {
+  switch (action.type) {
+    case "INC":
+      return state + 1;
+    case "DEC":
+      return state - 1;
+    case "ZERO":
+      return 0;
+    default:
+      return state;
+  }
+};
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [counter, counterDispatch] = useReducer(counterReducer, 0);
 
   return (
     <>
       <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <div>{counter}</div>
+        <div>
+          <button onClick={() => counterDispatch({ type: "INC" })}>+</button>
+          <button onClick={() => counterDispatch({ type: "DEC" })}>-</button>
+          <button onClick={() => counterDispatch({ type: "ZERO" })}>0</button>
+        </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
