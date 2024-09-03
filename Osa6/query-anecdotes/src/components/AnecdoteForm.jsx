@@ -13,6 +13,12 @@ const AnecdoteForm = () => {
     onSuccess: () => {
       queryClient.invalidateQueries("anecdotes");
     },
+    onError: () => {
+      sendNotification(
+        dispatch,
+        "Too short anecdote, musta have at least 5 characters."
+      );
+    },
   });
   const onCreate = (event) => {
     event.preventDefault();
