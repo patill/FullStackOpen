@@ -10,5 +10,11 @@ export const getAll = () => {
 };
 
 export const postNew = (anecdote) => {
-  return axios.post(baseUrl, anecdote).then((res) => res.data);
+  return axios.post(baseUrl, { ...anecdote, votes: 0 }).then((res) => res.data);
+};
+
+export const voteAnecdote = async (anecdote) => {
+  const voted = { ...anecdote, votes: anecdote.votes + 1 };
+  const result = await axios.put(`${baseUrl}/${voted.id}`, voted);
+  return result;
 };
