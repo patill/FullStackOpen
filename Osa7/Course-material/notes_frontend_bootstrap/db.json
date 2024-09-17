@@ -1,0 +1,58 @@
+{
+  "notes": [
+    {
+      "id": 1,
+      "content": "HTML is easy",
+      "date": "2022-1-17T17:30:31.098Z",
+      "important": false
+    },
+    {
+      "id": 2,
+      "content": "Browser can execute only JavaScript",
+      "date": "2022-1-17T18:39:34.091Z",
+      "important": false
+    },
+    {
+      "id": 3,
+      "content": "GET and POST are the most important methods of HTTP protocol",
+      "date": "2022-1-17T19:20:14.298Z",
+      "important": false
+    },
+    {
+      "content": "next note",
+      "date": "2023-09-19T09:11:32.492Z",
+      "important": false,
+      "id": 6
+    },
+    {
+      "content": "next",
+      "date": "2023-09-19T09:12:00.459Z",
+      "important": true,
+      "id": 7
+    },
+    {
+      "content": "third",
+      "date": "2023-09-19T09:13:21.821Z",
+      "important": true,
+      "id": 8
+    },
+    {
+      "content": "The trees are green",
+      "date": "2023-09-19T09:54:57.274Z",
+      "important": false,
+      "id": 9
+    },
+    {
+      "content": "The floor is blue",
+      "date": "2023-09-19T09:57:36.323Z",
+      "important": false,
+      "id": 10
+    },
+    {
+      "content": "The fence is white",
+      "date": "2023-09-19T10:36:07.888Z",
+      "important": true,
+      "id": 11
+    }
+  ]
+}
