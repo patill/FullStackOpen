@@ -29,24 +29,26 @@ const LoginForm = ({
         setPassword('')
     }
     return (
-        <div >
+        <div>
             <h2>Login</h2>
 
             <form onSubmit={handleLogin}>
                 <div>
-                    <TextField label="username" name="username"
+                    <TextField
+                        label="username"
+                        name="username"
                         value={username}
-                        onChange={handleUsernameChange}/>
-                    </div>
-                   
-
-
-                    <TextField label="password"
-                        type="password"
-                        value={password}
-                        id="password"
-                        onChange={handlePasswordChange}
+                        onChange={handleUsernameChange}
                     />
+                </div>
+
+                <TextField
+                    label="password"
+                    type="password"
+                    value={password}
+                    id="password"
+                    onChange={handlePasswordChange}
+                />
 
                 <Button variant="contained" type="submit" id="login-button">
                     login
