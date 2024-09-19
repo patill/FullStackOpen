@@ -1,10 +1,11 @@
 import { useState } from 'react'
-import PropTypes from 'prop-types'
+import { useDispatch } from 'react-redux'
+import { forwardRef } from 'react'
+import { addBlog } from '../reducers/blogReducer'
 
-const AddBlogForm = ({ saveBlog }) => {
-    const [blog, setBlog] = useState('')
-    const [author, setAuthor] = useState('')
-    const [url, setUrl] = useState('')
+const AddBlogForm = forwardRef((props, ref) => {
+    const dispatch = useDispatch()
+    //TODO use custom useState field for field cleaning
 
     const handleBlogChange = (event) => {
         setBlog(event.target.value)
@@ -20,10 +21,17 @@ const AddBlogForm = ({ saveBlog }) => {
 
     const postBlog = (event) => {
         event.preventDefault()
-        saveBlog({ title: blog, author, url })
-        setBlog('')
-        setAuthor('')
-        setUrl('')
+        const content = {
+            title: event.target.title.value,
+            author: event.target.author.value,
+            url: event.target.url.value,
+        }
+        dispatch(addBlog(content))
+        ref.current.toggleVisibility()
+        //addBlog({ title: blog, author, url })
+        // setBlog('')
+        // setAuthor('')
+        // setUrl('')
     }
 
     return (
@@ -34,40 +42,36 @@ const AddBlogForm = ({ saveBlog }) => {
                     Blog
                     <input
                         type="text"
-                        value={blog}
+                        //value={blog}
                         name="title"
                         placeholder="Blog title"
-                        onChange={handleBlogChange}
+                        //onChange={handleBlogChange}
                     />
                 </div>
                 <div>
                     Author
                     <input
                         type="text"
-                        value={author}
+                        //value={author}
                         name="author"
                         placeholder="Blog author"
-                        onChange={handleAuthorChange}
+                        //onChange={handleAuthorChange}
                     />
                 </div>
                 <div>
                     Url
                     <input
                         type="text"
-                        value={url}
+                        //value={url}
                         name="url"
                         placeholder="Blog url"
-                        onChange={handleUrlChange}
+                        //onChange={handleUrlChange}
                     />
                 </div>
                 <button type="submit">Send</button>
             </form>
         </div>
     )
-}
-
-AddBlogForm.propTypes = {
-    saveBlog: PropTypes.func.isRequired,
-}
+})
 
 export default AddBlogForm
