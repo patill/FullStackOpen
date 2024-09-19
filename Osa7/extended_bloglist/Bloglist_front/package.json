@@ -11,6 +11,12 @@
     "react-scripts": "^5.0.1",
     "web-vitals": "^4.2.3"
   },
+  "prettier": {
+    "trailingComma": "es5",
+    "tabWidth": 4,
+    "semi": false,
+    "singleQuote": true
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
