@@ -2,7 +2,7 @@ import { useState } from 'react'
 import Notification from './Notification'
 import PropTypes from 'prop-types'
 
-const Loginpage = ({ login, errorMessage }) => {
+const Loginpage = ({ login }) => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
 
@@ -24,7 +24,7 @@ const Loginpage = ({ login, errorMessage }) => {
     return (
         <div>
             <h2>Log into application</h2>
-            <Notification classname="error" message={errorMessage} />
+            <Notification />
             <form onSubmit={handleLogin}>
                 <div>
                     username
@@ -56,7 +56,6 @@ const Loginpage = ({ login, errorMessage }) => {
 
 Loginpage.propTypes = {
     login: PropTypes.func.isRequired,
-    errorMessage: PropTypes.string.isRequired,
 }
 
 export default Loginpage

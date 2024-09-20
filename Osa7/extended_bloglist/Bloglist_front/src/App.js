@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import { initializeBlogs } from './reducers/blogReducer'
+import { setNotification } from './reducers/notificationReducer'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import Loginpage from './components/Loginpage'
@@ -10,17 +11,10 @@ import AddBlogForm from './components/AddBlogForm'
 import BlogList from './components/BlogList'
 
 const App = () => {
-    //const [blogs, setBlogs] = useState([])
-    const [errorMessage, setErrorMessage] = useState(null)
-    const [notification, setNotification] = useState(null)
+    const dispatch = useDispatch()
     const [user, setUser] = useState(null)
 
     const toggleBlogForm = useRef()
-
-    const dispatch = useDispatch()
-    useEffect(() => {
-        dispatch(initializeBlogs())
-    }, [])
 
     useEffect(() => {
         const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -42,11 +36,23 @@ const App = () => {
             )
             blogService.setToken(user.token)
             setUser(user)
-        } catch (exception) {
-            setErrorMessage('wrong credentials')
-            setTimeout(() => {
-                setErrorMessage(null)
-            }, 5000)
+            dispatch(
+                setNotification(
+                    {
+                        notification: `User ${user.username} logged in`,
+                        class: 'notification',
+                    },
+                    6
+                )
+            )
+        } catch (error) {
+            console.log(error)
+            dispatch(
+                setNotification(
+                    { notification: 'Something went wrong', class: 'error' },
+                    3
+                )
+            )
         }
     }
 
@@ -60,63 +66,19 @@ const App = () => {
         }
     }
 
-    // const postBlog = (blogObj) => {
-    //     const sendData = async (blogObj) => {
-    //         //event.preventDefault();
-    //         try {
-    //             const newBlog = await blogService.newBlog(blogObj)
-    //             console.log(newBlog)
-    //             setNotification(`Successfully saved "${blogObj.title}"`)
-    //             setTimeout(() => setNotification(null), 5000)
-    //             //setBlogs(blogs.concat(newBlog))
-    //             toggleBlogForm.current.toggleVisibility()
-    //             //setBlog("");
-    //             //setAuthor("");
-    //             //setUrl("");
-    //         } catch (error) {
-    //             setErrorMessage('Someting went wrong, try again')
-    //             setTimeout(() => setErrorMessage(null), 5000)
-    //         }
-    //     }
-
-    //     sendData(blogObj)
-    // }
-
-    // const handleUpdateBlog = async (changedBlog) => {
-    //     try {
-    //         const updatedBlog = await blogService.update(changedBlog)
-    //         setBlogs(
-    //             blogs
-    //                 //.sort((a, b) => a.likes + b.likes)
-    //                 .map((blog) =>
-    //                     blog._id !== updatedBlog._id ? blog : updatedBlog
-    //                 )
-    //         )
-    //         setNotification('The blog entry has been modified successfully.')
-    //         setTimeout(() => setNotification(null), 5000)
-    //     } catch (error) {
-    //         setErrorMessage('Someting went wrong, try again')
-    //         setTimeout(() => setErrorMessage(null), 5000)
-    //     }
-    // }
-
-    // const remove = async (id) => {
-    //     //console.log(id);
-    //     await blogService.remove(id)
-    //     setNotification('The blog entry has been removed successfully.')
-    //     setTimeout(() => setNotification(null), 5000)
-    //     //need to update list here, sort again
-    //     //setBlogs(blogs.filter((blog) => blog._id !== id))
-    // }
+    useEffect(() => {
+        dispatch(initializeBlogs())
+    }, [])
 
     if (user === null) {
-        return <Loginpage login={handleLogin} errorMessage={errorMessage} />
+        return <Loginpage login={handleLogin} />
     }
+
     return (
         <div>
             <h1>Blogs</h1>
-            <Notification classname="error" message={errorMessage} />
-            <Notification classname="notification" message={notification} />
+            <Notification />
+
             <p>
                 {user.username} logged in.
                 <button onClick={handleLogout} type="submit">

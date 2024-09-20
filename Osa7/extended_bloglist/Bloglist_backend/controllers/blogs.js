@@ -73,14 +73,14 @@ blogRouter.patch("/:id", async (request, response, next) => {
     const blogToBeChanged = await Blog.findById(request.params.id);
     blogToBeChanged.likes = request.body.likes;
     console.log(blogToBeChanged);
-    if (user && user.id === blogToBeChanged.user.valueOf()) {
-      const result = await Blog.findByIdAndUpdate(
-        request.params.id,
-        blogToBeChanged,
-        { returnDocument: "after" }
-      );
-      response.json(result);
-    } else response.status(401).end();
+    //if (user && user.id === blogToBeChanged.user.valueOf()) {
+    const result = await Blog.findByIdAndUpdate(
+      request.params.id,
+      blogToBeChanged,
+      { returnDocument: "after" }
+    );
+    response.json(result);
+    //} else response.status(401).end();
   } catch (error) {
     next(error);
   }

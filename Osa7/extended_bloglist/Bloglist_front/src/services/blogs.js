@@ -27,7 +27,14 @@ const update = async (blog) => {
     const config = {
         headers: { Authorization: token },
     }
-    const response = await axios.patch(url, blog, config)
+    const res = await axios.get(url)
+    console.log(isNaN(res.data.likes))
+    const likedBlog = {
+        ...res.data,
+        likes: isNaN(res.data.likes) ? 1 : res.data.likes + 1,
+    }
+    console.log(likedBlog)
+    const response = await axios.patch(url, likedBlog, config)
     return response.data
 }
 

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import Togglable from './Togglable'
 import PropTypes from 'prop-types'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { removeBlog, likeBlog } from '../reducers/blogReducer'
 
 const Blog = ({ user, blog }) => {
@@ -14,12 +14,10 @@ const Blog = ({ user, blog }) => {
     const handleLike = async (event) => {
         event.preventDefault()
         try {
-            const blog = { ...updatedBlog }
-
-            isNaN(blog.likes) ? (blog.likes = 1) : blog.likes++
-            console.log(blog)
-            blog.user = userId
-            //handleUpdateBlog(blog)
+            // const blog = { ...blog }
+            // isNaN(blog.likes) ? (blog.likes = 1) : blog.likes++
+            // console.log(blog)
+            // blog.user = userId
             dispatch(likeBlog(blog))
         } catch (error) {
             console.log(error)
