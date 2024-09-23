@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef, useReducer } from "react";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useState, useEffect, useRef } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Blog from "./components/Blog";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
@@ -18,6 +18,61 @@ const App = () => {
   const toggleBlogForm = useRef();
 
   const dispatch = useNotificationDispatch();
+  const queryClient = useQueryClient();
+  const newBlogMutation = useMutation({
+    mutationFn: blogService.newBlog,
+    onSuccess: (data) => {
+      console.log(data);
+      sendNotification(dispatch, {
+        text: `The blog entry ${data.title} has been created`,
+        className: "notification",
+      });
+      queryClient.invalidateQueries({ queryKey: ["blogs"] });
+    },
+    onError: (err) => {
+      console.log(err);
+      sendNotification(dispatch, {
+        text: `There was an error`,
+        className: "error",
+      });
+    },
+  });
+
+  const likeMutation = useMutation({
+    mutationFn: blogService.update,
+    onSuccess: () => {
+      sendNotification(dispatch, {
+        text: "The blog entry has been modified successfully.",
+        className: "notification",
+      });
+      queryClient.invalidateQueries({ queryKey: ["blogs"] });
+    },
+    onError: (err) => {
+      console.log(err);
+      sendNotification(dispatch, {
+        text: "Someting went wrong, try again",
+        className: "error",
+      });
+    },
+  });
+
+  const removeMutation = useMutation({
+    mutationFn: blogService.remove,
+    onSuccess: (data) => {
+      sendNotification(dispatch, {
+        text: `The blog entry ${data.title} has been removed.`,
+        className: "notification",
+      });
+      queryClient.invalidateQueries({ queryKey: ["blogs"] });
+    },
+    onError: (err) => {
+      console.log(err);
+      sendNotification(dispatch, {
+        text: "The blog entry could not be removed",
+        className: "error",
+      });
+    },
+  });
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser");
@@ -29,6 +84,7 @@ const App = () => {
     }
   }, []);
 
+  //Fetching initial list with useQuery
   const result = useQuery({
     queryKey: ["blogs"],
     queryFn: blogService.getAll,
@@ -66,66 +122,6 @@ const App = () => {
     }
   };
 
-  const postBlog = (blogObj) => {
-    const sendData = async (blogObj) => {
-      //event.preventDefault();
-      try {
-        const newBlog = await blogService.newBlog(blogObj);
-        console.log(newBlog);
-        sendNotification(dispatch, {
-          text: `Successfully saved "${blogObj.title}"`,
-          className: "notification",
-        });
-        //setTimeout(() => setNotification(null), 5000);
-        //setBlogs(blogs.concat(newBlog));
-        toggleBlogForm.current.toggleVisibility();
-        //setBlog("");
-        //setAuthor("");
-        //setUrl("");
-      } catch (error) {
-        sendNotification(dispatch, {
-          text: "Someting went wrong, try again",
-          className: "error",
-        });
-      }
-    };
-
-    sendData(blogObj);
-  };
-
-  const handleUpdateBlog = async (changedBlog) => {
-    try {
-      const updatedBlog = await blogService.update(changedBlog);
-      // setBlogs(
-      //   blogs
-      //     //.sort((a, b) => a.likes + b.likes)
-      //     .map((blog) => (blog._id !== updatedBlog._id ? blog : updatedBlog))
-      // );
-      sendNotification(dispatch, {
-        text: "The blog entry has been modified successfully.",
-        className: "notification",
-      });
-      //setTimeout(() => setNotification(null), 5000);
-    } catch (error) {
-      sendNotification(dispatch, {
-        text: "Someting went wrong, try again",
-        className: "error",
-      });
-    }
-  };
-
-  const remove = async (id) => {
-    //console.log(id);
-    await blogService.remove(id);
-    sendNotification(dispatch, {
-      text: "The blog entry has been removed successfully.",
-      class: "notification",
-    });
-    //setTimeout(() => setNotification(null), 5000);
-    //need to update list here, sort again
-    //setBlogs(blogs.filter((blog) => blog._id !== id));
-  };
-
   if (user === null) {
     return <Loginpage login={handleLogin} />;
   }
@@ -142,7 +138,7 @@ const App = () => {
       </p>
       <div className="formdiv">
         <Togglable buttonLabel="Post a new blog" ref={toggleBlogForm}>
-          <AddBlogForm saveBlog={postBlog} />
+          <AddBlogForm saveBlog={newBlogMutation.mutate} />
         </Togglable>
       </div>
 
@@ -154,8 +150,8 @@ const App = () => {
               user={user}
               key={blog._id}
               blog={blog}
-              handleUpdateBlog={handleUpdateBlog}
-              handleRemoveBlog={remove}
+              handleUpdateBlog={likeMutation.mutate}
+              handleRemoveBlog={removeMutation.mutate}
             />
           ))
         //.sort((blogs) => blogs.blog.likes - blogs.blog.likes)
