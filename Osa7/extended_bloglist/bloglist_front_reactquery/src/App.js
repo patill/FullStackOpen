@@ -23,6 +23,7 @@ const App = () => {
     mutationFn: blogService.newBlog,
     onSuccess: (data) => {
       console.log(data);
+      toggleBlogForm.current.toggleVisibility();
       sendNotification(dispatch, {
         text: `The blog entry ${data.title} has been created`,
         className: "notification",
@@ -40,9 +41,9 @@ const App = () => {
 
   const likeMutation = useMutation({
     mutationFn: blogService.update,
-    onSuccess: () => {
+    onSuccess: (data) => {
       sendNotification(dispatch, {
-        text: "The blog entry has been modified successfully.",
+        text: `You liked ${data.title}.`,
         className: "notification",
       });
       queryClient.invalidateQueries({ queryKey: ["blogs"] });
@@ -58,9 +59,9 @@ const App = () => {
 
   const removeMutation = useMutation({
     mutationFn: blogService.remove,
-    onSuccess: (data) => {
+    onSuccess: () => {
       sendNotification(dispatch, {
-        text: `The blog entry ${data.title} has been removed.`,
+        text: `The blog entry has been removed.`,
         className: "notification",
       });
       queryClient.invalidateQueries({ queryKey: ["blogs"] });
@@ -142,20 +143,17 @@ const App = () => {
         </Togglable>
       </div>
 
-      {
-        blogs
-          .sort((a, b) => b.likes - a.likes)
-          .map((blog) => (
-            <Blog
-              user={user}
-              key={blog._id}
-              blog={blog}
-              handleUpdateBlog={likeMutation.mutate}
-              handleRemoveBlog={removeMutation.mutate}
-            />
-          ))
-        //.sort((blogs) => blogs.blog.likes - blogs.blog.likes)
-      }
+      {blogs
+        .sort((a, b) => b.likes - a.likes)
+        .map((blog) => (
+          <Blog
+            user={user}
+            key={blog._id}
+            blog={blog}
+            handleUpdateBlog={likeMutation.mutate}
+            handleRemoveBlog={removeMutation.mutate}
+          />
+        ))}
     </div>
   );
 };
