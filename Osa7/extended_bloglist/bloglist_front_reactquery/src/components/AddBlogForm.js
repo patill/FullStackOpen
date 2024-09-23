@@ -1,7 +1,7 @@
 import { useState } from "react";
-import PropTypes from "prop-types";
+import { useAddBlog } from "../hooks/blogHooks";
 
-const AddBlogForm = ({ saveBlog }) => {
+const AddBlogForm = ({ toggleRef }) => {
   const [blog, setBlog] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
@@ -17,10 +17,13 @@ const AddBlogForm = ({ saveBlog }) => {
   const handleUrlChange = (event) => {
     setUrl(event.target.value);
   };
-
+  const addBlogMutation = useAddBlog();
   const postBlog = (event) => {
+    console.log("post blog fired");
     event.preventDefault();
-    saveBlog({ title: blog, author, url });
+    addBlogMutation.mutate({ title: blog, author, url });
+    //saveBlog({ title: blog, author, url });
+    toggleRef.current.toggleVisibility();
     setBlog("");
     setAuthor("");
     setUrl("");
@@ -64,10 +67,6 @@ const AddBlogForm = ({ saveBlog }) => {
       </form>
     </div>
   );
-};
-
-AddBlogForm.propTypes = {
-  saveBlog: PropTypes.func.isRequired,
 };
 
 export default AddBlogForm;

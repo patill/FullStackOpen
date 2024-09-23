@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import Blog from "./components/Blog";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
@@ -18,62 +18,6 @@ const App = () => {
   const toggleBlogForm = useRef();
 
   const dispatch = useNotificationDispatch();
-  const queryClient = useQueryClient();
-  const newBlogMutation = useMutation({
-    mutationFn: blogService.newBlog,
-    onSuccess: (data) => {
-      console.log(data);
-      toggleBlogForm.current.toggleVisibility();
-      sendNotification(dispatch, {
-        text: `The blog entry ${data.title} has been created`,
-        className: "notification",
-      });
-      queryClient.invalidateQueries({ queryKey: ["blogs"] });
-    },
-    onError: (err) => {
-      console.log(err);
-      sendNotification(dispatch, {
-        text: `There was an error`,
-        className: "error",
-      });
-    },
-  });
-
-  const likeMutation = useMutation({
-    mutationFn: blogService.update,
-    onSuccess: (data) => {
-      sendNotification(dispatch, {
-        text: `You liked ${data.title}.`,
-        className: "notification",
-      });
-      queryClient.invalidateQueries({ queryKey: ["blogs"] });
-    },
-    onError: (err) => {
-      console.log(err);
-      sendNotification(dispatch, {
-        text: "Someting went wrong, try again",
-        className: "error",
-      });
-    },
-  });
-
-  const removeMutation = useMutation({
-    mutationFn: blogService.remove,
-    onSuccess: () => {
-      sendNotification(dispatch, {
-        text: `The blog entry has been removed.`,
-        className: "notification",
-      });
-      queryClient.invalidateQueries({ queryKey: ["blogs"] });
-    },
-    onError: (err) => {
-      console.log(err);
-      sendNotification(dispatch, {
-        text: "The blog entry could not be removed",
-        className: "error",
-      });
-    },
-  });
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser");
@@ -139,20 +83,14 @@ const App = () => {
       </p>
       <div className="formdiv">
         <Togglable buttonLabel="Post a new blog" ref={toggleBlogForm}>
-          <AddBlogForm saveBlog={newBlogMutation.mutate} />
+          <AddBlogForm toggleRef={toggleBlogForm} />
         </Togglable>
       </div>
 
       {blogs
         .sort((a, b) => b.likes - a.likes)
         .map((blog) => (
-          <Blog
-            user={user}
-            key={blog._id}
-            blog={blog}
-            handleUpdateBlog={likeMutation.mutate}
-            handleRemoveBlog={removeMutation.mutate}
-          />
+          <Blog user={user} key={blog._id} blog={blog} />
         ))}
     </div>
   );
