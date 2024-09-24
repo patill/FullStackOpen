@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Togglable from './Togglable'
 import PropTypes from 'prop-types'
 import { useDispatch } from 'react-redux'
+import { Link } from 'react-router-dom'
 import { removeBlog, likeBlog } from '../reducers/blogReducer'
 
 const Blog = ({ user, blog }) => {
@@ -14,10 +15,6 @@ const Blog = ({ user, blog }) => {
     const handleLike = async (event) => {
         event.preventDefault()
         try {
-            // const blog = { ...blog }
-            // isNaN(blog.likes) ? (blog.likes = 1) : blog.likes++
-            // console.log(blog)
-            // blog.user = userId
             dispatch(likeBlog(blog))
         } catch (error) {
             console.log(error)
@@ -35,7 +32,9 @@ const Blog = ({ user, blog }) => {
     }
     return (
         <div className="blogentry">
-            <h2 className="blogName">{blog.title} </h2>
+            <h2 className="blogName">
+                <Link to={`/blogs/${blog._id}`}>{blog.title}</Link>{' '}
+            </h2>
             <Togglable buttonLabel="show">
                 <div>
                     <h3 className="blog-author">Author: {blog.author}</h3>
