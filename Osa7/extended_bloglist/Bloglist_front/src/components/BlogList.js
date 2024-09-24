@@ -5,7 +5,6 @@ const BlogList = () => {
     const blogs = useSelector((state) => {
         return [...state.blogs]
     })
-    const user = useSelector((state) => state.login)
     console.log(blogs)
 
     if (blogs.length === 0) {
@@ -18,7 +17,7 @@ const BlogList = () => {
             {blogs
                 .sort((a, b) => b.likes - a.likes)
                 .map((blog) => (
-                    <Blog user={user} key={blog._id} blog={blog} />
+                    <Blog key={blog._id} blog={blog} />
                 ))}
         </div>
     )

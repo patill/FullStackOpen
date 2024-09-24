@@ -32,7 +32,10 @@ const Router = () => {
                         !user ? <Navigate replace to="/login" /> : <Home />
                     }
                 />
-                <Route path="/blogs/:id" element={<BlogPage />} />
+                <Route
+                    path="/blogs/:id"
+                    element={user ? <BlogPage /> : <Navigate to="/login" />}
+                />
                 <Route
                     path="/users"
                     element={
