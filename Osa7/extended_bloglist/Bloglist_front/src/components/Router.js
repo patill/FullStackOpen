@@ -12,6 +12,7 @@ import Menu from './Menu'
 import Home from './Home'
 import Loginpage from './Loginpage'
 import Users from './Users'
+import User from './User'
 
 const Router = () => {
     const user = useSelector((state) => state.login)
@@ -36,6 +37,7 @@ const Router = () => {
                         user ? <Users /> : <Navigate replace to="/login" />
                     }
                 />
+                <Route path="/users/:id" element={<User />} />
                 <Route
                     path="/login"
                     element={user ? <Navigate to="/" /> : <Loginpage />}
