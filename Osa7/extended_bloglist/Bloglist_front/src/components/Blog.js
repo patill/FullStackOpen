@@ -33,37 +33,10 @@ const Blog = ({ user, blog }) => {
     return (
         <div className="blogentry">
             <h2 className="blogName">
-                <Link to={`/blogs/${blog._id}`}>{blog.title}</Link>{' '}
+                <Link to={`/blogs/${blog._id}`}>
+                    {blog.title} by {blog.author}
+                </Link>{' '}
             </h2>
-            <Togglable buttonLabel="show">
-                <div>
-                    <h3 className="blog-author">Author: {blog.author}</h3>
-                    <p className="blog-url">
-                        URL: <a href={blog.url}>{blog.url}</a>
-                    </p>
-                    <div className="blog-likes">
-                        likes: {blog.likes ? blog.likes : 0}
-                        {'  '}
-                        <button onClick={handleLike} type="submit">
-                            like
-                        </button>
-                    </div>
-                    <p className="blog-username">Lisääjä: {blog.user.name}</p>
-                    {currentUser.username === blogUserName ? (
-                        <div>
-                            <button
-                                className="remove"
-                                onClick={handleRemove}
-                                type="submit"
-                            >
-                                Remove
-                            </button>
-                        </div>
-                    ) : (
-                        ''
-                    )}
-                </div>
-            </Togglable>
         </div>
     )
 }

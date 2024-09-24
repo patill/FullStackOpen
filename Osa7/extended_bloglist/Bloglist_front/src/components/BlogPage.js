@@ -1,10 +1,11 @@
 import { useSelector, useDispatch } from 'react-redux'
-import { useMatch } from 'react-router-dom'
+import { useMatch, useNavigate } from 'react-router-dom'
 import { setNotification } from '../reducers/notificationReducer'
 import Notification from './Notification'
-import { likeBlog } from '../reducers/blogReducer'
+import { likeBlog, removeBlog } from '../reducers/blogReducer'
 
 const BlogPage = () => {
+    const currentUser = useSelector((state) => state.login)
     const blogs = useSelector((state) => state.blogs)
     const match = useMatch('/blogs/:id')
     const blog = match
@@ -12,6 +13,7 @@ const BlogPage = () => {
         : null
 
     const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     const handleLike = async (event) => {
         event.preventDefault()
@@ -20,6 +22,16 @@ const BlogPage = () => {
         } catch (error) {
             console.log(error)
             return <p>There was an error.</p>
+        }
+    }
+
+    const handleRemove = async (event) => {
+        event.preventDefault()
+        const confirm = window.confirm('Do you really want to remove?')
+        console.log(confirm)
+        if (confirm) {
+            dispatch(removeBlog(blog._id))
+            navigate('/')
         }
     }
 
@@ -42,8 +54,9 @@ const BlogPage = () => {
     }
     return (
         <div>
-            <h1>{blog.title}</h1>
-            <p>
+            <h1 className="blogName">{blog.title}</h1>
+            <h3 className="blog-author">Author: {blog.author}</h3>
+            <p className="blog-url">
                 <a href={blog.url}>{blog.url}</a>
             </p>
             <div className="blog-likes">
@@ -53,7 +66,20 @@ const BlogPage = () => {
                     like
                 </button>
             </div>
-            <p>added by {blog.user.name}</p>
+            <p className="blog-username">added by {blog.user.name}</p>
+            {currentUser.username === blog.user.username ? (
+                <div>
+                    <button
+                        className="remove"
+                        onClick={handleRemove}
+                        type="submit"
+                    >
+                        Remove
+                    </button>
+                </div>
+            ) : (
+                ''
+            )}
 
             <p>
                 <a href="/">Back to the blog listing.</a>
