@@ -1,10 +1,11 @@
 import { useSelector } from 'react-redux'
 import Blog from './Blog'
 
-const BlogList = ({ user }) => {
+const BlogList = () => {
     const blogs = useSelector((state) => {
         return [...state.blogs]
     })
+    const user = useSelector((state) => state.user)
     console.log(blogs)
 
     if (blogs.length === 0) {

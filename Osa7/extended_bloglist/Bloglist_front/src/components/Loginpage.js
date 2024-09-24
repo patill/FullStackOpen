@@ -1,10 +1,13 @@
 import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { login } from '../reducers/userReducer'
 import Notification from './Notification'
 import PropTypes from 'prop-types'
 
-const Loginpage = ({ login }) => {
+const Loginpage = () => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+    const dispatch = useDispatch()
 
     const handleUsernameChange = (event) => {
         setUsername(event.target.value)
@@ -17,7 +20,8 @@ const Loginpage = ({ login }) => {
     const handleLogin = (event) => {
         event.preventDefault()
         const user = { username, password }
-        login(user)
+        //login(user)
+        dispatch(login(user))
         setUsername('')
         setPassword('')
     }
