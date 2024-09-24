@@ -4,7 +4,7 @@ import blogService from '../services/blogs'
 import { setNotification } from './notificationReducer'
 
 const userSlice = createSlice({
-    name: 'user',
+    name: 'login',
     initialState: null,
     reducers: {
         setUser(state, action) {

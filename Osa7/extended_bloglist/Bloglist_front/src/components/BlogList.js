@@ -5,7 +5,7 @@ const BlogList = () => {
     const blogs = useSelector((state) => {
         return [...state.blogs]
     })
-    const user = useSelector((state) => state.user)
+    const user = useSelector((state) => state.login)
     console.log(blogs)
 
     if (blogs.length === 0) {

@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { login } from '../reducers/userReducer'
 import Notification from './Notification'
-import PropTypes from 'prop-types'
 
 const Loginpage = () => {
     const [username, setUsername] = useState('')
@@ -56,10 +55,6 @@ const Loginpage = () => {
             </form>
         </div>
     )
-}
-
-Loginpage.propTypes = {
-    login: PropTypes.func.isRequired,
 }
 
 export default Loginpage

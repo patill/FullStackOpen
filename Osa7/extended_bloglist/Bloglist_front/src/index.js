@@ -17,12 +17,14 @@ import App from './App'
 import './index.css'
 import notificationReducer from './reducers/notificationReducer'
 import userReducer from './reducers/userReducer'
+import appUserReducer from './reducers/appUserReducer'
 
 const store = configureStore({
     reducer: {
         blogs: blogReducer,
         notification: notificationReducer,
-        user: userReducer,
+        login: userReducer,
+        users: appUserReducer,
     },
 })
 
