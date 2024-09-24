@@ -54,6 +54,7 @@ const BlogPage = () => {
     }
     return (
         <div>
+            <Notification />
             <h1 className="blogName">{blog.title}</h1>
             <h3 className="blog-author">Author: {blog.author}</h3>
             <p className="blog-url">
