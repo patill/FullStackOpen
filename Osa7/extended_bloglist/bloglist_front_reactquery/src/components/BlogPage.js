@@ -1,31 +1,44 @@
-//import { useSelector, useDispatch } from 'react-redux'
 import { useMatch, useNavigate } from "react-router-dom";
 import { useContext } from "react";
-//import { setNotification } from "../reducers/notificationReducer";
+import { useQueryClient } from "@tanstack/react-query";
 import Notification from "./Notification";
 import {
   useNotificationDispatch,
   sendNotification,
 } from "./NotificationContext";
-//import { likeBlog, removeBlog } from "../reducers/blogReducer";
+
 import LoginContext from "./LoginContext";
+import { useLikeBlog, useRemoveBlog } from "../hooks/blogHooks";
 
 const BlogPage = () => {
   const [currentUser] = useContext(LoginContext);
-  //const blogs = useSelector((state) => state.blogs)
-  const blogs = [];
+  const queryClient = useQueryClient();
+  const [blogs] = queryClient.getQueriesData({ queryKey: ["blogs"] });
   const match = useMatch("/blogs/:id");
-  const blog = match
-    ? blogs.find((blog) => blog._id === match.params.id)
-    : null;
+  let blog;
+
+  if (blogs) {
+    blog = match ? blogs[1].find((blog) => blog._id === match.params.id) : null;
+  }
+
+  console.log("Blogpage:");
+  console.log(blog);
 
   const dispatch = useNotificationDispatch();
   const navigate = useNavigate();
 
+  const likeBlogMutation = useLikeBlog();
+  const removeBlogMutation = useRemoveBlog();
+
   const handleLike = async (event) => {
     event.preventDefault();
     try {
-      //dispatch(likeBlog(blog));
+      const blogToUpdate = blog;
+      isNaN(blogToUpdate.likes)
+        ? (blogToUpdate.likes = 1)
+        : blogToUpdate.likes++;
+      //blogToUpdate.user = currentUser.id;
+      likeBlogMutation.mutate(blog);
     } catch (error) {
       console.log(error);
       return <p>There was an error.</p>;
@@ -37,6 +50,7 @@ const BlogPage = () => {
     const confirm = window.confirm("Do you really want to remove?");
     console.log(confirm);
     if (confirm) {
+      removeBlogMutation.mutate(blog._id);
       //dispatch(removeBlog(blog._id));
       navigate("/");
     }
