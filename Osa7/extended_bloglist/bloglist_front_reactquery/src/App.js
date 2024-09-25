@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useContext } from "react";
 import { useQuery } from "@tanstack/react-query";
 import Blog from "./components/Blog";
 import blogService from "./services/blogs";
@@ -11,20 +11,27 @@ import {
 } from "./components/NotificationContext";
 import Togglable from "./components/Togglable";
 import AddBlogForm from "./components/AddBlogForm";
+import LoginContext, {
+  useLoginDispatch,
+  setUser,
+  removeUser,
+} from "./components/LoginContext";
 
 const App = () => {
-  const [user, setUser] = useState(null);
+  //const [user, setUser] = useState(null);
+  const [user] = useContext(LoginContext);
 
   const toggleBlogForm = useRef();
 
   const dispatch = useNotificationDispatch();
+  const loginDispatch = useLoginDispatch();
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser");
     console.log(loggedUserJSON);
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON);
-      setUser(user);
+      setUser(loginDispatch, user);
       blogService.setToken(user.token);
     }
   }, []);
@@ -48,7 +55,7 @@ const App = () => {
       console.log(user);
       window.localStorage.setItem("loggedBlogappUser", JSON.stringify(user));
       blogService.setToken(user.token);
-      setUser(user);
+      setUser(loginDispatch, user);
     } catch (exception) {
       sendNotification(dispatch, {
         text: "wrong credentials",
@@ -61,15 +68,15 @@ const App = () => {
     event.preventDefault();
     try {
       window.localStorage.removeItem("loggedBlogappUser");
-      setUser(null);
+      removeUser(loginDispatch);
     } catch (exception) {
       console.log(exception);
     }
   };
 
-  if (user === null) {
-    return <Loginpage login={handleLogin} />;
-  }
+  // if (user === null) {
+  //   return <Loginpage login={handleLogin} />;
+  // }
   return (
     <div>
       <h1>Blogs</h1>
