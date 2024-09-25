@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import blogService from "./services/blogs";
+import userService from "./services/users";
 import { useLoginDispatch, setUser } from "./components/LoginContext";
 import Router from "./components/Router";
 
@@ -23,7 +24,10 @@ const App = () => {
     queryFn: blogService.getAll,
   });
 
+  const users = useQuery({ queryKey: ["users"], queryFn: userService.getAll });
+
   console.log(JSON.parse(JSON.stringify(result)));
+  console.log(JSON.parse(JSON.stringify(users)));
 
   if (result.isLoading) {
     return <div>loading data...</div>;
