@@ -1,29 +1,10 @@
-import { useEffect, useRef, useContext } from "react";
+import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import Blog from "./components/Blog";
 import blogService from "./services/blogs";
-import loginService from "./services/login";
-import Loginpage from "./components/Loginpage";
-import Notification from "./components/Notification";
-import {
-  useNotificationDispatch,
-  sendNotification,
-} from "./components/NotificationContext";
-import Togglable from "./components/Togglable";
-import AddBlogForm from "./components/AddBlogForm";
-import LoginContext, {
-  useLoginDispatch,
-  setUser,
-  removeUser,
-} from "./components/LoginContext";
+import { useLoginDispatch, setUser } from "./components/LoginContext";
+import Router from "./components/Router";
 
 const App = () => {
-  //const [user, setUser] = useState(null);
-  const [user] = useContext(LoginContext);
-
-  const toggleBlogForm = useRef();
-
-  const dispatch = useNotificationDispatch();
   const loginDispatch = useLoginDispatch();
 
   useEffect(() => {
@@ -47,60 +28,8 @@ const App = () => {
   if (result.isLoading) {
     return <div>loading data...</div>;
   }
-  const blogs = result.data.sort((a, b) => b.likes - a.likes);
 
-  const handleLogin = async (userObj) => {
-    try {
-      const user = await loginService.login(userObj);
-      console.log(user);
-      window.localStorage.setItem("loggedBlogappUser", JSON.stringify(user));
-      blogService.setToken(user.token);
-      setUser(loginDispatch, user);
-    } catch (exception) {
-      sendNotification(dispatch, {
-        text: "wrong credentials",
-        className: "error",
-      });
-    }
-  };
-
-  const handleLogout = async (event) => {
-    event.preventDefault();
-    try {
-      window.localStorage.removeItem("loggedBlogappUser");
-      removeUser(loginDispatch);
-    } catch (exception) {
-      console.log(exception);
-    }
-  };
-
-  // if (user === null) {
-  //   return <Loginpage login={handleLogin} />;
-  // }
-  return (
-    <div>
-      <h1>Blogs</h1>
-
-      <Notification />
-      <p>
-        {user.username} logged in.
-        <button onClick={handleLogout} type="submit">
-          logout
-        </button>
-      </p>
-      <div className="formdiv">
-        <Togglable buttonLabel="Post a new blog" ref={toggleBlogForm}>
-          <AddBlogForm toggleRef={toggleBlogForm} />
-        </Togglable>
-      </div>
-
-      {blogs
-        .sort((a, b) => b.likes - a.likes)
-        .map((blog) => (
-          <Blog user={user} key={blog._id} blog={blog} />
-        ))}
-    </div>
-  );
+  return <Router />;
 };
 
 export default App;

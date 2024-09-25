@@ -39,11 +39,6 @@ export const useLoginDispatch = () => {
   return fullList[1];
 };
 
-// export const sendNotification = (dispatch, message) => {
-//   dispatch({ type: "ADD", payload: message });
-//   setTimeout(() => dispatch({ type: "REMOVE" }), 5000);
-// };
-
 export const setUser = (dispatch, user) => {
   dispatch({ type: "addUser", payload: user });
 };

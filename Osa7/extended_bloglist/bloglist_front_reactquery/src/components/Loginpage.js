@@ -1,10 +1,33 @@
 import { useState } from "react";
 import Notification from "./Notification";
-import PropTypes from "prop-types";
+import loginService from "../services/login";
+import blogService from "../services/blogs";
+import {
+  useNotificationDispatch,
+  sendNotification,
+} from "./NotificationContext";
+import { useLoginDispatch, setUser } from "./LoginContext";
 
-const Loginpage = ({ login, errorMessage }) => {
+const Loginpage = () => {
+  const loginDispatch = useLoginDispatch();
+  const dispatch = useNotificationDispatch();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  const login = async (userObj) => {
+    try {
+      const user = await loginService.login(userObj);
+      console.log(user);
+      window.localStorage.setItem("loggedBlogappUser", JSON.stringify(user));
+      blogService.setToken(user.token);
+      setUser(loginDispatch, user);
+    } catch (exception) {
+      sendNotification(dispatch, {
+        text: "wrong credentials",
+        className: "error",
+      });
+    }
+  };
 
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
@@ -24,7 +47,7 @@ const Loginpage = ({ login, errorMessage }) => {
   return (
     <div>
       <h2>Log into application</h2>
-      <Notification classname="error" message={errorMessage} />
+      <Notification />
       <form onSubmit={handleLogin}>
         <div>
           username
@@ -52,11 +75,6 @@ const Loginpage = ({ login, errorMessage }) => {
       </form>
     </div>
   );
-};
-
-Loginpage.propTypes = {
-  login: PropTypes.func.isRequired,
-  errorMessage: PropTypes.string.isRequired,
 };
 
 export default Loginpage;
