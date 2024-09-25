@@ -21,7 +21,7 @@ const AddBlogForm = ({ toggleRef }) => {
   const postBlog = (event) => {
     console.log("post blog fired");
     event.preventDefault();
-    addBlogMutation.mutate({ title: blog, author, url });
+    addBlogMutation.mutate({ title: blog, author, url, likes: 0 });
     //saveBlog({ title: blog, author, url });
     toggleRef.current.toggleVisibility();
     setBlog("");

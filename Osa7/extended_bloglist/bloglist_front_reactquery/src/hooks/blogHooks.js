@@ -69,12 +69,12 @@ export const useRemoveBlog = () => {
   queryClient.setMutationDefaults(["remove-blog"], {
     mutationFn: (data) => {
       blogService.remove(data._id);
-      return data;
+      //return data.title;
     },
-    onSuccess: (data) => {
-      console.log(data);
+    onSuccess: () => {
+      //console.log(data);
       sendNotification(dispatch, {
-        text: `The blog entry ${data.title} has been removed.`,
+        text: `The blog entry  has been removed.`,
         className: "notification",
       });
       queryClient.invalidateQueries({ queryKey: ["blogs"] });

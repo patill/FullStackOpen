@@ -50,7 +50,7 @@ const BlogPage = () => {
     const confirm = window.confirm("Do you really want to remove?");
     console.log(confirm);
     if (confirm) {
-      removeBlogMutation.mutate(blog._id);
+      removeBlogMutation.mutate(blog);
       //dispatch(removeBlog(blog._id));
       navigate("/");
     }
