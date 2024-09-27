@@ -6,13 +6,11 @@ import {
   useNotificationDispatch,
   sendNotification,
 } from "./NotificationContext";
-import commentService from "../services/comments";
 import LoginContext from "./LoginContext";
 import { useLikeBlog, useRemoveBlog } from "../hooks/blogHooks";
 import { useAddComment } from "../hooks/commentHooks";
 
 const BlogPage = () => {
-  let comments = [];
   const [currentUser] = useContext(LoginContext);
   const queryClient = useQueryClient();
   const [blogs] = queryClient.getQueriesData({ queryKey: ["blogs"] });
@@ -26,17 +24,9 @@ const BlogPage = () => {
       : null;
   }
 
-  console.log(blogId + "blog id");
-
-  comments = useQuery({
-    queryKey: ["comments", blogId],
-    queryFn: commentService.getAll,
-  });
-
-  console.log(JSON.parse(JSON.stringify(comments)));
-
   console.log("Blogpage:");
   console.log(blog);
+  console.log(blogId);
 
   const dispatch = useNotificationDispatch();
   const navigate = useNavigate();
@@ -73,7 +63,7 @@ const BlogPage = () => {
 
   const postComment = async (event) => {
     event.preventDefault();
-    addCommentMutation.mutate(event.target.text.value);
+    addCommentMutation.mutate({ id: blogId, text: event.target.text.value });
   };
 
   if (!blog) {
@@ -123,9 +113,9 @@ const BlogPage = () => {
         </form>
 
         <div className="comments-display">
-          {comments.data && comments.data.length > 0 ? (
+          {blog.comments.length > 0 ? (
             <ul>
-              {comments.data.map((comment) => (
+              {blog.comments.map((comment) => (
                 <li key={comment._id}>{comment.text}</li>
               ))}
             </ul>
