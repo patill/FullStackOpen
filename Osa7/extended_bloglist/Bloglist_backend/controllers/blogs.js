@@ -81,7 +81,7 @@ blogRouter.patch("/:id", async (request, response, next) => {
       request.params.id,
       blogToBeChanged,
       { returnDocument: "after" }
-    );
+    ).populate("comments user");
     response.json(result);
     //} else response.status(401).end();
   } catch (error) {
