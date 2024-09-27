@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import blogService from '../services/blogs'
+import commentService from '../services/comments'
 import { setNotification } from './notificationReducer'
 
 const blogSlice = createSlice({
@@ -26,7 +27,11 @@ const blogSlice = createSlice({
             //console.log(action.payload)
             const item = state.find((item) => item._id === action.payload._id)
             //console.log(JSON.parse(JSON.stringify(item)))
-            const changedItem = { ...item, likes: action.payload.likes }
+            const changedItem = {
+                ...item,
+                likes: action.payload.likes,
+                comments: action.payload.comments,
+            }
             //console.log(JSON.parse(JSON.stringify(changedItem)))
             return state.map((blog) =>
                 blog._id !== changedItem._id ? blog : changedItem
@@ -143,6 +148,40 @@ export const likeBlog = (blog) => {
                         class: 'error',
                     },
                     5
+                )
+            )
+        }
+    }
+}
+
+export const commentBlog = (blog, text) => {
+    return async (dispatch) => {
+        try {
+            const newComment = await commentService.postNew(blog._id, text)
+            const changedBlog = {
+                ...blog,
+                comments: blog.comments.concat(newComment),
+            }
+            console.log(changedBlog)
+            dispatch(changeInList(changedBlog))
+            dispatch(
+                setNotification(
+                    {
+                        notification: 'Comment successfully created',
+                        class: 'notification',
+                    },
+                    3
+                )
+            )
+        } catch (err) {
+            dispatch(
+                setNotification(
+                    {
+                        notification:
+                            'Something went wrong while adding a comment',
+                        class: 'error',
+                    },
+                    4
                 )
             )
         }

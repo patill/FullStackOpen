@@ -1,13 +1,12 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { useMatch, useNavigate } from 'react-router-dom'
 import { setNotification } from '../reducers/notificationReducer'
-import { addComment, getComments } from '../reducers/commentReducer'
+
 import Notification from './Notification'
-import { likeBlog, removeBlog } from '../reducers/blogReducer'
+import { likeBlog, removeBlog, commentBlog } from '../reducers/blogReducer'
 import { useEffect } from 'react'
 
 const BlogPage = () => {
-    let comments = []
     const currentUser = useSelector((state) => state.login)
     const blogs = useSelector((state) => state.blogs)
     const match = useMatch('/blogs/:id')
@@ -42,7 +41,8 @@ const BlogPage = () => {
         event.preventDefault()
         const text = event.target.text.value
         console.log(text)
-        dispatch(addComment(blog._id, text))
+        console.log(blog._id)
+        dispatch(commentBlog(blog, text))
     }
 
     if (!blog) {
@@ -61,12 +61,8 @@ const BlogPage = () => {
                 <p>This blog entry does not exist.</p>
             </div>
         )
-    } else {
-        useEffect(() => {
-            dispatch(getComments(blog._id))
-        }, [])
-        comments = useSelector((state) => state.comments)
     }
+
     return (
         <div>
             <Notification />
@@ -105,9 +101,9 @@ const BlogPage = () => {
                 </form>
 
                 <div className="comments-display">
-                    {comments.length > 0 ? (
+                    {blog.comments.length > 0 ? (
                         <ul>
-                            {comments.map((comment) => (
+                            {blog.comments.map((comment) => (
                                 <li key={comment._id}>{comment.text}</li>
                             ))}
                         </ul>

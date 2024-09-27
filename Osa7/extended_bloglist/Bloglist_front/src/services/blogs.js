@@ -28,7 +28,6 @@ const update = async (blog) => {
         headers: { Authorization: token },
     }
     const res = await axios.get(url)
-    console.log(isNaN(res.data.likes))
     const likedBlog = {
         ...res.data,
         likes: isNaN(res.data.likes) ? 1 : res.data.likes + 1,
