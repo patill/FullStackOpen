@@ -1,6 +1,6 @@
 import { useMatch, useNavigate } from "react-router-dom";
 import { useContext } from "react";
-import { useQueryClient, useQuery } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import Notification from "./Notification";
 import {
   useNotificationDispatch,
