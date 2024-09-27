@@ -64,55 +64,91 @@ const BlogPage = () => {
     }
 
     return (
-        <div>
+        <div className="content">
             <Notification />
-            <h1 className="blogName">{blog.title}</h1>
-            <h3 className="blog-author">Author: {blog.author}</h3>
-            <p className="blog-url">
-                <a href={blog.url}>{blog.url}</a>
-            </p>
-            <div className="blog-likes">
-                {blog.likes ? blog.likes : 0}
-                {'  '} likes {'  '}
-                <button onClick={handleLike} type="submit">
-                    like
-                </button>
-            </div>
-            <p className="blog-username">added by {blog.user.name}</p>
-            {currentUser.username === blog.user.username ? (
-                <div>
-                    <button
-                        className="remove"
-                        onClick={handleRemove}
-                        type="submit"
-                    >
-                        Remove
-                    </button>
+            <div className="card">
+                <div className="card-header">
+                    <div className="card-header-title">
+                        <h1 className="blogName title ">{blog.title}</h1>
+                    </div>
                 </div>
-            ) : (
-                ''
-            )}
+                <div className="card-content">
+                    <h3 className="blog-author subtitle is-4">
+                        Author: {blog.author}
+                    </h3>
+                    <p className="blog-url">
+                        <a href={blog.url}>{blog.url}</a>
+                    </p>
+                    <div className="blog-likes">
+                        <p>
+                            {blog.likes ? blog.likes : 0}
+                            {'  '} likes {'  '}
+                        </p>
+                    </div>
+                    <p className="blog-username">added by {blog.user.name}</p>
 
-            <div className="comments">
-                <h2>Comments</h2>
-                <form onSubmit={postComment}>
-                    <input name="text" />
-                    <button>Add comment</button>
-                </form>
+                    <div className="comments">
+                        <h2>Comments</h2>
+                        <form id="comment-form" onSubmit={postComment}>
+                            <input
+                                className="input comment-input"
+                                name="text"
+                                placeholder="Type text to add a comment"
+                            />
+                        </form>
 
-                <div className="comments-display">
-                    {blog.comments.length > 0 ? (
-                        <ul>
-                            {blog.comments.map((comment) => (
-                                <li key={comment._id}>{comment.text}</li>
-                            ))}
-                        </ul>
-                    ) : (
-                        <p>Not comments yet</p>
-                    )}
+                        <div className="comments-display">
+                            <h3 className="title is-5">Comments left:</h3>
+                            {blog.comments.length > 0 ? (
+                                <ul>
+                                    {blog.comments.map((comment) => (
+                                        <li key={comment._id}>
+                                            {comment.text}
+                                        </li>
+                                    ))}
+                                </ul>
+                            ) : (
+                                <p>No comments yet</p>
+                            )}
+                        </div>
+                    </div>
+                </div>
+                <div className="card-footer">
+                    <div className="card-footer-item">
+                        <button
+                            className="button is-primary"
+                            onClick={handleLike}
+                            type="submit"
+                        >
+                            like
+                        </button>
+                    </div>
+                    <div className="card-footer-item">
+                        <button
+                            form="comment-form"
+                            onSubmit={postComment}
+                            className="button is-primary"
+                        >
+                            Add comment
+                        </button>
+                    </div>
+                    <div className="card-footer-item">
+                        {currentUser.username === blog.user.username ? (
+                            <div>
+                                <button
+                                    className="remove button is-danger"
+                                    onClick={handleRemove}
+                                    type="submit"
+                                >
+                                    Remove
+                                </button>
+                            </div>
+                        ) : (
+                            ''
+                        )}
+                    </div>
                 </div>
             </div>
-
             <p>
                 <a href="/">Back to the blog listing.</a>
             </p>

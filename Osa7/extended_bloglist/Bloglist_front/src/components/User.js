@@ -30,7 +30,7 @@ const User = () => {
         )
     }
     return (
-        <div>
+        <div className="content">
             <h1>{user.name}</h1>
             <h2>Added blogs</h2>
             <ul>

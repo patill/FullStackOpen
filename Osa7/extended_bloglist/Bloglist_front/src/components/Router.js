@@ -23,31 +23,32 @@ const Router = () => {
     return (
         <div>
             <Menu />
-
-            <Routes>
-                <Route
-                    exact
-                    path="/"
-                    element={
-                        !user ? <Navigate replace to="/login" /> : <Home />
-                    }
-                />
-                <Route
-                    path="/blogs/:id"
-                    element={user ? <BlogPage /> : <Navigate to="/login" />}
-                />
-                <Route
-                    path="/users"
-                    element={
-                        user ? <Users /> : <Navigate replace to="/login" />
-                    }
-                />
-                <Route path="/users/:id" element={<User />} />
-                <Route
-                    path="/login"
-                    element={user ? <Navigate to="/" /> : <Loginpage />}
-                />
-            </Routes>
+            <div className="main">
+                <Routes>
+                    <Route
+                        exact
+                        path="/"
+                        element={
+                            !user ? <Navigate replace to="/login" /> : <Home />
+                        }
+                    />
+                    <Route
+                        path="/blogs/:id"
+                        element={user ? <BlogPage /> : <Navigate to="/login" />}
+                    />
+                    <Route
+                        path="/users"
+                        element={
+                            user ? <Users /> : <Navigate replace to="/login" />
+                        }
+                    />
+                    <Route path="/users/:id" element={<User />} />
+                    <Route
+                        path="/login"
+                        element={user ? <Navigate to="/" /> : <Loginpage />}
+                    />
+                </Routes>
+            </div>
         </div>
     )
 }

@@ -1,47 +1,60 @@
+body {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+form {
+    margin-bottom: 15px;
+}
+
 .error {
-  color: red;
-  background: lightgrey;
-  font-size: 20px;
-  border-style: solid;
-  border-radius: 5px;
-  padding: 10px;
-  margin-bottom: 10px;
-  max-width: 70%;
+    color: red;
+    background: lightgrey;
+    font-size: 20px;
+    border-style: solid;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+    max-width: 70%;
 }
 
 .notification {
-  color: green;
-  background: lightgrey;
-  font-size: 20px;
-  border-style: solid;
-  border-radius: 5px;
-  padding: 10px;
-  margin-bottom: 10px;
-  max-width: 70%;
+    color: green;
+    background: lightgrey;
+    font-size: 20px;
+    border-style: solid;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+    max-width: 70%;
 }
 
 .blogentry {
-  border-style: solid;
-  border-color: gray;
-  padding: 10px;
-  margin-bottom: 10px;
+    border-color: gray;
+    padding: 10px;
+    margin-bottom: 10px;
 }
 
 .toggle {
-  display: inline;
-}
-
-.blogName {
-  display: inline;
+    display: inline;
 }
 
 .formdiv {
-  max-width: 40%;
-  border-style: solid;
-  border-color: gray;
-  padding: 15px;
+    max-width: 40%;
+    border-style: solid;
+    border-color: rgb(144, 57, 57);
+    padding: 15px;
+    border-radius: 12px;
 }
 
-.remove {
-  color: red;
+.send-button {
+    margin-top: 20px;
+}
+
+.delete {
+    margin-left: 5px;
+}
+
+.comment-input {
+    width: 50%;
 }

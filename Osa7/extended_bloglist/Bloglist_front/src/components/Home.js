@@ -13,7 +13,7 @@ const Home = () => {
 
     return (
         <div>
-            <h1>Blogs</h1>
+            <h1 className="title">Blogs</h1>
             <Notification />
 
             <div className="formdiv">

@@ -37,11 +37,12 @@ const AddBlogForm = forwardRef((props, ref) => {
 
     return (
         <div>
-            <h2>post a new blog</h2>
+            <h2 className="title is-3">post a new blog</h2>
             <form onSubmit={postBlog}>
                 <div>
                     Blog
                     <input
+                        className="input"
                         type="text"
                         //value={blog}
                         name="title"
@@ -54,6 +55,7 @@ const AddBlogForm = forwardRef((props, ref) => {
                     <input
                         type="text"
                         //value={author}
+                        className="input"
                         name="author"
                         placeholder="Blog author"
                         //onChange={handleAuthorChange}
@@ -63,13 +65,21 @@ const AddBlogForm = forwardRef((props, ref) => {
                     Url
                     <input
                         type="text"
+                        className="input"
                         //value={url}
                         name="url"
                         placeholder="Blog url"
                         //onChange={handleUrlChange}
                     />
                 </div>
-                <button type="submit">Send</button>
+                <div className="block">
+                    <button
+                        className="button is-primary send-button"
+                        type="submit"
+                    >
+                        Send
+                    </button>
+                </div>
             </form>
         </div>
     )

@@ -25,33 +25,46 @@ const Loginpage = () => {
         setPassword('')
     }
     return (
-        <div>
+        <div className="content">
             <h2>Log into application</h2>
             <Notification />
             <form onSubmit={handleLogin}>
-                <div>
-                    username
-                    <input
-                        type="text"
-                        value={username}
-                        name="Username"
-                        id="username"
-                        onChange={handleUsernameChange}
-                    />
+                <div className="field">
+                    <label className="label">username</label>
+                    <div className="control">
+                        <input
+                            className="input"
+                            type="text"
+                            value={username}
+                            name="Username"
+                            placeholder="Type your username"
+                            id="username"
+                            onChange={handleUsernameChange}
+                        />
+                    </div>
                 </div>
-                <div>
-                    password
+                <div className="field">
+                    <label className="label">password</label>
+
                     <input
                         type="password"
+                        placeholder="Type your password"
+                        className="input"
                         value={password}
                         name="Password"
                         id="password"
                         onChange={handlePasswordChange}
                     />
                 </div>
-                <button id="submit" type="submit">
-                    login
-                </button>
+                <div className="control">
+                    <button
+                        className="button is-link"
+                        id="submit"
+                        type="submit"
+                    >
+                        login
+                    </button>
+                </div>
             </form>
         </div>
     )

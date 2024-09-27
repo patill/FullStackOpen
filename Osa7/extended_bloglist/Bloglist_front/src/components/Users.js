@@ -17,7 +17,7 @@ const Users = () => {
     console.log(users)
     return (
         <div>
-            <h1>User page</h1>
+            <h1 className="title is-1">User page</h1>
             <table>
                 <thead>
                     <tr>

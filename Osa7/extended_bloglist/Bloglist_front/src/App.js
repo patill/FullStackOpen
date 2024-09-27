@@ -4,6 +4,7 @@ import { initializeBlogs } from './reducers/blogReducer'
 import Router from './components/Router'
 import { initializeUser } from './reducers/userReducer'
 import { getAppUsers } from './reducers/appUserReducer'
+import 'bulma/css/bulma.min.css'
 
 const App = () => {
     const dispatch = useDispatch()
