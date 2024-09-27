@@ -16,6 +16,7 @@ import blogReducer from './reducers/blogReducer'
 import App from './App'
 import './index.css'
 import notificationReducer from './reducers/notificationReducer'
+import commentReducer from './reducers/commentReducer'
 import userReducer from './reducers/userReducer'
 import appUserReducer from './reducers/appUserReducer'
 
@@ -25,6 +26,7 @@ const store = configureStore({
         notification: notificationReducer,
         login: userReducer,
         users: appUserReducer,
+        comments: commentReducer,
     },
 })
 
