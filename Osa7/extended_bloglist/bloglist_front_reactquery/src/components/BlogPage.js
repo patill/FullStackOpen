@@ -1,25 +1,39 @@
 import { useMatch, useNavigate } from "react-router-dom";
 import { useContext } from "react";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQueryClient, useQuery } from "@tanstack/react-query";
 import Notification from "./Notification";
 import {
   useNotificationDispatch,
   sendNotification,
 } from "./NotificationContext";
-
+import commentService from "../services/comments";
 import LoginContext from "./LoginContext";
 import { useLikeBlog, useRemoveBlog } from "../hooks/blogHooks";
+import { useAddComment } from "../hooks/commentHooks";
 
 const BlogPage = () => {
+  let comments = [];
   const [currentUser] = useContext(LoginContext);
   const queryClient = useQueryClient();
   const [blogs] = queryClient.getQueriesData({ queryKey: ["blogs"] });
   const match = useMatch("/blogs/:id");
-  let blog;
+  let blog, blogId;
 
-  if (blogs) {
+  if (blogs && blogs[1]) {
     blog = match ? blogs[1].find((blog) => blog._id === match.params.id) : null;
+    blogId = match
+      ? blogs[1].find((blog) => blog._id === match.params.id)._id
+      : null;
   }
+
+  console.log(blogId + "blog id");
+
+  comments = useQuery({
+    queryKey: ["comments", blogId],
+    queryFn: commentService.getAll,
+  });
+
+  console.log(JSON.parse(JSON.stringify(comments)));
 
   console.log("Blogpage:");
   console.log(blog);
@@ -29,6 +43,7 @@ const BlogPage = () => {
 
   const likeBlogMutation = useLikeBlog();
   const removeBlogMutation = useRemoveBlog();
+  const addCommentMutation = useAddComment(blogId);
 
   const handleLike = async (event) => {
     event.preventDefault();
@@ -56,6 +71,11 @@ const BlogPage = () => {
     }
   };
 
+  const postComment = async (event) => {
+    event.preventDefault();
+    addCommentMutation.mutate(event.target.text.value);
+  };
+
   if (!blog) {
     sendNotification(dispatch, {
       notification: "This blog entry does not exist.",
@@ -68,6 +88,7 @@ const BlogPage = () => {
       </div>
     );
   }
+
   return (
     <div>
       <Notification />
@@ -93,6 +114,26 @@ const BlogPage = () => {
       ) : (
         ""
       )}
+
+      <div className="comments">
+        <h2>Comments</h2>
+        <form onSubmit={postComment}>
+          <input name="text" />
+          <button>Add comment</button>
+        </form>
+
+        <div className="comments-display">
+          {comments.data && comments.data.length > 0 ? (
+            <ul>
+              {comments.data.map((comment) => (
+                <li key={comment._id}>{comment.text}</li>
+              ))}
+            </ul>
+          ) : (
+            <p>Not comments yet</p>
+          )}
+        </div>
+      </div>
 
       <p>
         <a href="/">Back to the blog listing.</a>
