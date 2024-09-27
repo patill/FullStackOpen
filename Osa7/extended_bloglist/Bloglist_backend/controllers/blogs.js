@@ -2,16 +2,19 @@ const blogRouter = require("express").Router();
 const Blog = require("../models/Blog");
 
 blogRouter.get("/", async (request, response) => {
-  const blogs = await Blog.find({}).populate("user", { username: 1, name: 1 });
+  const blogs = await Blog.find({}).populate([
+    { path: "user", select: "username name" },
+    { path: "comments", select: "text" },
+  ]); //populate("user", { username: 1, name: 1 });
   response.json(blogs);
 });
 
 blogRouter.get("/:id", async (request, response, next) => {
   try {
-    const blog = await Blog.findById(request.params.id).populate("user", {
-      username: 1,
-      name: 1,
-    });
+    const blog = await Blog.findById(request.params.id).populate([
+      { path: "user", select: "username name" },
+      { path: "comments", select: "text" },
+    ]);
     response.json(blog);
   } catch (error) {
     next(error);
