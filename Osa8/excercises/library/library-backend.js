@@ -105,23 +105,34 @@ const typeDefs = `
     genres: [String]
   }
 
+  scalar BookCount
+
   type Author {
     name: String!
     born: String
+    bookCount: BookCount!
   }
 
   type Query {
     bookCount: Int!
     authorCount: Int!
     allBooks: [Book!]!
+    allAuthors: [Author!]!
   }
 `;
 
 const resolvers = {
+  Author: {
+    bookCount: (root) => {
+      const booklist = books.filter((book) => book.author === root.name);
+      return booklist.length;
+    },
+  },
   Query: {
     bookCount: () => books.length,
     authorCount: () => authors.length,
     allBooks: () => books,
+    allAuthors: () => authors,
   },
 };
 
