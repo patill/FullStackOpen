@@ -4,6 +4,7 @@ import "./App.css";
 import Persons from "./components/Persons";
 import PersonForm from "./components/PersonForm";
 import { ALL_PERSONS } from "./queries";
+import PhoneForm from "./components/PhoneForm";
 
 const Notify = ({ errorMessage }) => {
   if (!errorMessage) {
@@ -42,6 +43,7 @@ function App() {
       <div>
         <Persons persons={result.data.allPersons} />
       </div>
+      <PhoneForm setError={notify} />
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
