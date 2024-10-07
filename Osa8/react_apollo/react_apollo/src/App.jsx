@@ -16,8 +16,9 @@ const ALL_PERSONS = gql`
 
 function App() {
   const [count, setCount] = useState(0);
-  const result = useQuery(ALL_PERSONS, { pollInterval: 2000 });
+  const result = useQuery(ALL_PERSONS);
   //Update the cache with pollinterval every second second to force updating the page
+  // as object parameter on the useQuery call: {pollIntervall: 2000}
 
   if (result.loading) {
     return <div>loading...</div>;
