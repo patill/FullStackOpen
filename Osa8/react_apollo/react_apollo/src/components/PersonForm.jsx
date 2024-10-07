@@ -30,7 +30,7 @@ const ALL_PERSONS = gql`
   }
 `;
 
-const PersonForm = (props) => {
+const PersonForm = () => {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [street, setStreet] = useState("");
