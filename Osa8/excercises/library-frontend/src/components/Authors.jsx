@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useQuery } from "@apollo/client";
 import { ALL_AUTHORS } from "../queries";
 import EditAuthor from "./EditAuthor";
+import EditAuthorRS from "./EditAuthor_reactselect";
 
 const Authors = (props) => {
   const [authorToChange, setAuthorToChange] = useState(null);
@@ -63,6 +64,8 @@ const Authors = (props) => {
           onClose={() => setAuthorToChange(null)}
         />
       ) : null}
+
+      <EditAuthorRS authors={authors} />
     </div>
   );
 };
