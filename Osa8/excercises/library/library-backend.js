@@ -102,7 +102,7 @@ const typeDefs = `
   type Book {
     title: String!
     author: String!
-    published: String
+    published: Int
     genres: [String]
   }
 
@@ -110,7 +110,7 @@ const typeDefs = `
 
   type Author {
     name: String!
-    born: String
+    born: Int
     bookCount: BookCount
   }
 
