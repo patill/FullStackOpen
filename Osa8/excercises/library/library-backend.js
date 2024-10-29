@@ -209,6 +209,25 @@ const resolvers = {
         console.log(author);
         await author.save();
       } catch (error) {
+        if (error.name === "ValidationError") {
+          if (error.errors.name.kind === "unique") {
+            throw new GraphQLError("Author should be unique", {
+              extensions: {
+                code: "BAD_USER_INPUT",
+                invalidArgs: args.author,
+                error,
+              },
+            });
+          } else if (error.errors.name.kind === "minlength") {
+            throw new GraphQLError("Author should contain at least 4 letters", {
+              extensions: {
+                code: "BAD_USER_INPUT",
+                invalidArgs: args.author,
+                error,
+              },
+            });
+          }
+        }
         throw new GraphQLError("Saving author failed", {
           extensions: {
             code: "BAD_USER_INPUT",
@@ -228,6 +247,28 @@ const resolvers = {
         try {
           await author.save();
         } catch (error) {
+          if (error.name === "ValidationError") {
+            if (error.errors.name.kind === "unique") {
+              throw new GraphQLError("Author should be unique", {
+                extensions: {
+                  code: "BAD_USER_INPUT",
+                  invalidArgs: args.author,
+                  error,
+                },
+              });
+            } else if (error.errors.name.kind === "minlength") {
+              throw new GraphQLError(
+                "Author should contain at least 4 letters",
+                {
+                  extensions: {
+                    code: "BAD_USER_INPUT",
+                    invalidArgs: args.author,
+                    error,
+                  },
+                }
+              );
+            }
+          }
           throw new GraphQLError("Saving author failed", {
             extensions: {
               code: "BAD_USER_INPUT",
@@ -252,6 +293,25 @@ const resolvers = {
         console.log(newBook);
         await newBook.save();
       } catch (error) {
+        if (error.name === "ValidationError") {
+          if (error.errors.name.kind === "unique") {
+            throw new GraphQLError("Title should be unique", {
+              extensions: {
+                code: "BAD_USER_INPUT",
+                invalidArgs: args.title,
+                error,
+              },
+            });
+          } else if (error.errors.name.kind === "minlength") {
+            throw new GraphQLError("Title should contain at least 4 letters", {
+              extensions: {
+                code: "BAD_USER_INPUT",
+                invalidArgs: args.title,
+                error,
+              },
+            });
+          }
+        }
         throw new GraphQLError("Saving book failed", {
           extensions: { code: "BAD_USER_INPUT", invalidArgs: args, error },
         });
@@ -265,6 +325,25 @@ const resolvers = {
       try {
         await author.save();
       } catch (error) {
+        if (error.name === "ValidationError") {
+          if (error.errors.name.kind === "unique") {
+            throw new GraphQLError("Author should be unique", {
+              extensions: {
+                code: "BAD_USER_INPUT",
+                invalidArgs: args.author,
+                error,
+              },
+            });
+          } else if (error.errors.name.kind === "minlength") {
+            throw new GraphQLError("Author should contain at least 4 letters", {
+              extensions: {
+                code: "BAD_USER_INPUT",
+                invalidArgs: args.author,
+                error,
+              },
+            });
+          }
+        }
         throw new GraphQLError("Saving author failed", {
           extensions: { code: "BAD_USER_INPUT", invalidArgs: args, error },
         });
