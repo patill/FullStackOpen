@@ -9,18 +9,37 @@ const PersonForm = ({ setError }) => {
   const [city, setCity] = useState("");
 
   const [createPerson] = useMutation(CREATE_PERSON, {
-    refetchQueries: [{ query: ALL_PERSONS }], //there can be more than one query
+    //refetchQueries: [{ query: ALL_PERSONS }], //there can be more than one query. This updates the cache but the refetch is done with avery request.
+    //Instead use own defined cache update:
+    update: (cache, response) => {
+      cache.updateQuery({ query: ALL_PERSONS }, ({ allPersons }) => {
+        return {
+          allPersons: allPersons.concat(response.data.addPerson),
+        };
+      });
+      //the callback function is given a reference to the cache
+      //and the data returned by the mutation as paramters.
+    },
     onError: (error) => {
       console.log(error.graphQLErrors);
       const messages = error.graphQLErrors.map((e) => e.message).join("/n");
       setError(messages);
     },
+    //disabling the cache altogether:
+    //fetchPolicy: "no-cache",
   });
 
   const submit = (event) => {
     event.preventDefault();
 
-    createPerson({ variables: { name, phone, street, city } });
+    createPerson({
+      variables: {
+        name,
+        street,
+        city,
+        phone: phone.length > 0 ? phone : undefined,
+      },
+    });
 
     setName("");
     setPhone("");
