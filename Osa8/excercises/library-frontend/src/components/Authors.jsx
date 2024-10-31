@@ -1,13 +1,11 @@
 import { useState } from "react";
-import { useQuery } from "@apollo/client";
-import { ALL_AUTHORS } from "../queries";
 import EditAuthor from "./EditAuthor";
 import EditAuthorRS from "./EditAuthor_reactselect";
 
 const Authors = (props) => {
   const [authorToChange, setAuthorToChange] = useState(null);
   console.log(authorToChange);
-  const result = useQuery(ALL_AUTHORS);
+  const result = props.authors; //useQuery(ALL_AUTHORS);
 
   if (!props.show) {
     return null;
