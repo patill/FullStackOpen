@@ -34,7 +34,7 @@ const Authors = (props) => {
               <td>{a.born}</td>
               <td>{a.bookCount}</td>
               <td>
-                {!a.born ? (
+                {!a.born && props.token ? (
                   !authorToChange ? (
                     <button
                       onClick={() =>
@@ -63,7 +63,7 @@ const Authors = (props) => {
         />
       ) : null}
 
-      <EditAuthorRS authors={authors} />
+      {props.token ? <EditAuthorRS authors={authors} /> : ""}
     </div>
   );
 };

@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useQuery } from "@apollo/client";
+import { useEffect, useState } from "react";
+import { useQuery, useApolloClient } from "@apollo/client";
 import Authors from "./components/Authors";
 import Books from "./components/Books";
 import NewBook from "./components/NewBook";
@@ -12,6 +12,7 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState(null);
   const authors = useQuery(ALL_AUTHORS);
   const books = useQuery(ALL_BOOKS);
+  const client = useApolloClient();
 
   const notify = (message) => {
     setErrorMessage(message);
@@ -20,15 +21,30 @@ const App = () => {
     }, 5000);
   };
 
+  //read the token from localstore once:
+  useEffect(() => {
+    const token = localStorage.getItem("library-user-token");
+    if (token) {
+      setToken(token);
+    }
+  });
+
+  const logout = () => {
+    setToken(null);
+    localStorage.clear();
+    client.resetStore();
+  };
+
   return (
     <div>
       <div>
         <button onClick={() => setPage("authors")}>authors</button>
         <button onClick={() => setPage("books")}>books</button>
-        <button onClick={() => setPage("add")}>add book</button>
-        <button onClick={() => setPage("login")}>login</button>
+        {token ? <button onClick={() => setPage("add")}>add book</button> : ""}
+        {!token ? <button onClick={() => setPage("login")}>login</button> : ""}
+        {token ? <button onClick={logout}>logout</button> : ""}
       </div>
-      <Authors show={page === "authors"} authors={authors} />
+      <Authors show={page === "authors"} authors={authors} token={token} />
       <Books show={page === "books"} books={books} />
       <NewBook show={page === "add"} />
       <LoginForm
