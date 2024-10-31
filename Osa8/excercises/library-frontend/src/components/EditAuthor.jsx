@@ -26,7 +26,7 @@ const EditAuthor = (props) => {
 
     console.log("edit author...");
     editAuthor({ variables: { name: props.author.name, setBornTo: born } });
-
+    props.setAuthorToChange(null);
     //setName("");
     //setBorn(undefined);
   };

@@ -60,6 +60,7 @@ const Authors = (props) => {
         <EditAuthor
           author={authorToChange}
           onClose={() => setAuthorToChange(null)}
+          setAuthorToChange={setAuthorToChange}
         />
       ) : null}
 
