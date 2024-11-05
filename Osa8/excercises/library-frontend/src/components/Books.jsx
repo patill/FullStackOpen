@@ -13,7 +13,7 @@ const Books = (props) => {
     variables: { genre: "" },
   });
   useEffect(() => {
-    refetch({ genre: "" });
+    if (props.show) refetch({ genre: "" });
   }, [props.show]);
   useEffect(() => {
     if (!genresData.loading && !genresData.error) {
