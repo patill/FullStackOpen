@@ -9,7 +9,10 @@ const EditAuthor = (props) => {
   console.log(props);
 
   const [editAuthor] = useMutation(EDIT_AUTHOR, {
-    refetchQueries: [{ query: ALL_BOOKS }, { query: ALL_AUTHORS }],
+    refetchQueries: [
+      { query: ALL_BOOKS, variables: { genres: "" } },
+      { query: ALL_AUTHORS },
+    ],
     onError: (error) => {
       console.log(error.graphQLErrors);
     },

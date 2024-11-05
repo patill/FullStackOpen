@@ -9,9 +9,10 @@ import LoginForm from "./components/LoginForm";
 const App = () => {
   const [page, setPage] = useState("authors");
   const [token, setToken] = useState(null);
+
   const [errorMessage, setErrorMessage] = useState(null);
   const authors = useQuery(ALL_AUTHORS);
-  const books = useQuery(ALL_BOOKS);
+
   const client = useApolloClient();
 
   const notify = (message) => {
@@ -45,7 +46,7 @@ const App = () => {
         {token ? <button onClick={logout}>logout</button> : ""}
       </div>
       <Authors show={page === "authors"} authors={authors} token={token} />
-      <Books show={page === "books"} books={books} />
+      <Books show={page === "books"} />
       <NewBook show={page === "add"} />
       <LoginForm
         show={page === "login"}
