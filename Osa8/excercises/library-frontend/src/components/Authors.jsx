@@ -5,7 +5,7 @@ import EditAuthorRS from "./EditAuthor_reactselect";
 const Authors = (props) => {
   const [authorToChange, setAuthorToChange] = useState(null);
   console.log(authorToChange);
-  const result = props.authors; //useQuery(ALL_AUTHORS);
+  const result = props.authors;
 
   if (!props.show) {
     return null;

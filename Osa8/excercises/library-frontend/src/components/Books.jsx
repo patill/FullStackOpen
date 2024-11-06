@@ -14,9 +14,9 @@ const Books = (props) => {
   });
   useEffect(() => {
     if (props.show) refetch({ genre: "" });
-  }, [props.show]);
+  }, [props.show, refetch]);
   useEffect(() => {
-    if (!genresData.loading && !genresData.error) {
+    if (!genresData.loading && !genresData.error && props.show) {
       console.log(genresData);
       setGenres(
         genresData.data.allBooks
