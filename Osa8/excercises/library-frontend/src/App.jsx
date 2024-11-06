@@ -5,6 +5,7 @@ import Books from "./components/Books";
 import NewBook from "./components/NewBook";
 import { ALL_AUTHORS, ALL_BOOKS } from "./queries";
 import LoginForm from "./components/LoginForm";
+import Userpage from "./components/Userpage";
 
 const App = () => {
   const [page, setPage] = useState("authors");
@@ -41,12 +42,18 @@ const App = () => {
       <div>
         <button onClick={() => setPage("authors")}>authors</button>
         <button onClick={() => setPage("books")}>books</button>
+        {token ? (
+          <button onClick={() => setPage("me")}>My favourite books</button>
+        ) : (
+          ""
+        )}
         {token ? <button onClick={() => setPage("add")}>add book</button> : ""}
         {!token ? <button onClick={() => setPage("login")}>login</button> : ""}
         {token ? <button onClick={logout}>logout</button> : ""}
       </div>
       <Authors show={page === "authors"} authors={authors} token={token} />
       <Books show={page === "books"} />
+      <Userpage show={page === "me"} />
       <NewBook show={page === "add"} />
       <LoginForm
         show={page === "login"}
