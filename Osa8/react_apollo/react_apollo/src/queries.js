@@ -16,10 +16,10 @@ const FIND_PERSON = gql`
   query findPersonByName($nameToSearch: String!) {
     findPerson(name: $nameToSearch) {
       ...PersonDetails
-      }
     }
   }
-    ${PERSON_DETAILS}
+
+  ${PERSON_DETAILS}
 `;
 
 const ALL_PERSONS = gql`
@@ -72,4 +72,20 @@ const LOGIN = gql`
   }
 `;
 
-export { CREATE_PERSON, FIND_PERSON, ALL_PERSONS, EDIT_NUMBER, LOGIN };
+const PERSON_ADDED = gql`
+  subscription {
+    personAdded {
+      ...PersonDetails
+    }
+  }
+  ${PERSON_DETAILS}
+`;
+
+export {
+  CREATE_PERSON,
+  FIND_PERSON,
+  ALL_PERSONS,
+  EDIT_NUMBER,
+  LOGIN,
+  PERSON_ADDED,
+};

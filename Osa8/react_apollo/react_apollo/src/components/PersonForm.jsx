@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { ALL_PERSONS, CREATE_PERSON } from "../queries";
+import { updateCache } from "../App";
 
 const PersonForm = ({ setError }) => {
   const [name, setName] = useState("");
@@ -12,13 +13,7 @@ const PersonForm = ({ setError }) => {
     //refetchQueries: [{ query: ALL_PERSONS }], //there can be more than one query. This updates the cache but the refetch is done with avery request.
     //Instead use own defined cache update:
     update: (cache, response) => {
-      cache.updateQuery({ query: ALL_PERSONS }, ({ allPersons }) => {
-        return {
-          allPersons: allPersons.concat(response.data.addPerson),
-        };
-      });
-      //the callback function is given a reference to the cache
-      //and the data returned by the mutation as paramters.
+      updateCache(cache, { query: ALL_PERSONS }, response.data.addPerson);
     },
     onError: (error) => {
       console.log(error.graphQLErrors);
