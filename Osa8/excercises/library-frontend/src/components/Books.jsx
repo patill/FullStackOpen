@@ -4,6 +4,7 @@ import { ALL_BOOKS } from "../queries";
 
 const Books = (props) => {
   const [genres, setGenres] = useState([]);
+  const [selectedGenre, setSelectedGenre] = useState("");
   //this query for the books to show:
   const { loading, error, data, refetch } = useQuery(ALL_BOOKS, {
     variables: { genre: "" },
@@ -40,13 +41,24 @@ const Books = (props) => {
   console.log(data);
 
   console.log(genres);
+  const handleClick = (genre) => {
+    setSelectedGenre(genre);
+    refetch({ genre: genre });
+  };
+
+  const isActive = (el) => (selectedGenre === el ? "active" : "");
+  console.log(isActive);
 
   return (
     <div>
       <h2>books</h2>
       <div>
         {genres.map((el) => (
-          <button key={el} onClick={() => refetch({ genre: el })}>
+          <button
+            key={el}
+            className={isActive(el)}
+            onClick={() => handleClick(el)}
+          >
             {el}
           </button>
         ))}

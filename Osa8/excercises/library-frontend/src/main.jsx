@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
+import "./main.css";
 
 import {
   ApolloClient,
@@ -18,13 +19,6 @@ const authLink = setContext((_, { headers }) => {
       authorization: token ? `Bearer ${token}` : null,
     },
   };
-  console.log(hds);
-  // return {
-  //   header: {
-  //     ...headers,
-  //     authorization: token ? `Bearer ${token}` : null,
-  //   },
-  // };
   return hds;
 });
 
