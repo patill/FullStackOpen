@@ -1,4 +1,12 @@
 const { ApolloServer } = require("@apollo/server");
+const { expressMiddleware } = require("@apollo/server/express4");
+const {
+  ApolloServerPluginDrainHttpServer,
+} = require("@apollo/server/plugin/drainHttpServer");
+const { makeExecutableSchema } = require("@graphql-tools/schema");
+const express = require("express");
+const cors = require("cors");
+const http = require("http");
 const { startStandaloneServer } = require("@apollo/server/standalone");
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", false);
@@ -21,43 +29,64 @@ mongoose
     console.log("error connection to MongoDB:", error.message);
   });
 
-/*
- * Suomi:
- * Saattaisi olla järkevämpää assosioida kirja ja sen tekijä tallettamalla kirjan yhteyteen tekijän nimen sijaan tekijän id
- * Yksinkertaisuuden vuoksi tallennamme kuitenkin kirjan yhteyteen tekijän nimen
- *
- * English:
- * It might make more sense to associate a book with its author by storing the author's id in the context of the book instead of the author's name
- * However, for simplicity, we will store the author's name in connection with the book
- *
- * Spanish:
- * Podría tener más sentido asociar un libro con su autor almacenando la id del autor en el contexto del libro en lugar del nombre del autor
- * Sin embargo, por simplicidad, almacenaremos el nombre del autor en conexión con el libro
- */
+// const server = new ApolloServer({
+//   typeDefs,
+//   resolvers,
+// });
 
-/*
-  you can remove the placeholder query once your first one has been implemented 
-*/
+// startStandaloneServer(server, {
+//   listen: { port: 4000 },
+//   context: async ({ req, res }) => {
+//     const auth = req ? req.headers.authorization : null;
+//     if (auth && auth.startsWith("Bearer ")) {
+//       const decodedToken = jwt.verify(
+//         auth.substring(7),
+//         process.env.JWT_SECRET
+//       );
+//       const currentUser = await User.findById(decodedToken.id);
+//       console.log(currentUser);
+//       return { currentUser };
+//     }
+//   },
+// }).then(({ url }) => {
+//   console.log(`Server ready at ${url}`);
+// });
 
-const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-});
+const start = async () => {
+  const app = express();
+  const httpServer = http.createServer(app);
 
-startStandaloneServer(server, {
-  listen: { port: 4000 },
-  context: async ({ req, res }) => {
-    const auth = req ? req.headers.authorization : null;
-    if (auth && auth.startsWith("Bearer ")) {
-      const decodedToken = jwt.verify(
-        auth.substring(7),
-        process.env.JWT_SECRET
-      );
-      const currentUser = await User.findById(decodedToken.id);
-      console.log(currentUser);
-      return { currentUser };
-    }
-  },
-}).then(({ url }) => {
-  console.log(`Server ready at ${url}`);
-});
+  const server = new ApolloServer({
+    schema: makeExecutableSchema({ typeDefs, resolvers }),
+    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+  });
+
+  await server.start();
+
+  app.use(
+    "/",
+    cors(),
+    express.json(),
+    expressMiddleware(server, {
+      context: async ({ req }) => {
+        const auth = req ? req.headers.authorization : null;
+        if (auth && auth.startsWith("Bearer ")) {
+          const decodedToken = jwt.verify(
+            auth.substring(7),
+            process.env.JWT_SECRET
+          );
+          const currentUser = await User.findById(decodedToken.id);
+          return { currentUser };
+        }
+      },
+    })
+  );
+
+  const PORT = 4000;
+
+  httpServer.listen(PORT, () =>
+    console.log(`Server is now running on http://localhost:${PORT}`)
+  );
+};
+
+start();
