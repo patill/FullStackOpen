@@ -86,12 +86,13 @@ const App = () => {
         setError={notify}
         notify={errorMessage}
       />
-      <Userpage show={page === "me"} />
-      <NewBook show={page === "add"} notify={notify} />
+      <Userpage show={page === "me"} notify={errorMessage} />
+      <NewBook show={page === "add"} notify={errorMessage} setError={notify} />
       <LoginForm
         show={page === "login"}
         setToken={setToken}
-        notify={notify}
+        notify={errorMessage}
+        setError={notify}
         setPage={setPage}
       />
     </div>

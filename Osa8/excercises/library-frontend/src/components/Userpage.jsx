@@ -15,7 +15,7 @@ const Userpage = (props) => {
       console.log(`Genre is ${user.data.me.favoriteGenre}`);
       books.refetch({ genre: user.data.me.favoriteGenre });
     }
-  }, [props.show, user.data, user.loading, user.error, books]);
+  }, [props.show, books]);
 
   if (!props.show) {
     return null;
@@ -28,6 +28,7 @@ const Userpage = (props) => {
   return (
     <div>
       <h1>Me</h1>
+      {props.notify ? <p>{props.notify}</p> : ""}
       <h2>My favorite books for the genre {user.data.me.favoriteGenre}</h2>
       <table>
         <tbody>
