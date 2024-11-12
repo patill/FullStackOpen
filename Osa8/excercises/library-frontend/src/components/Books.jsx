@@ -11,7 +11,7 @@ const Books = (props) => {
   });
   useEffect(() => {
     if (props.show) {
-      //props.allBooks.refetch();
+      //update Genres when displaying the page and/or cache changes
       setGenres(
         props.allBooks.data.allBooks
           .map((book) => book.genres)
@@ -19,7 +19,7 @@ const Books = (props) => {
       );
       setSelectedGenre("");
     }
-  }, [props.show]);
+  }, [props.show, props.allBooks]);
 
   const handleClick = (genre) => {
     setSelectedGenre(genre);

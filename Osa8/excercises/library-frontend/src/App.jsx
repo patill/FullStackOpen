@@ -18,19 +18,29 @@ const App = () => {
   const client = useApolloClient();
 
   useSubscription(BOOK_ADDED, {
-    onData: ({ data }) => {
+    onData: ({ data, client }) => {
       console.log("new book added: ");
       console.log(data);
 
       const addedBook = data.data.bookAdded;
       console.log(addedBook);
       notify(`${addedBook.title} added.`);
-      // client.cache.updateQuery({ query: "filteredBooks" }, (data) => {
-      //   console.log(data);
-      //   return {
-      //     //allBooks: allBooks.concat(addedBook),
-      //   };
-      // });
+      client.cache.updateQuery({ query: ALL_BOOKS, variables: {} }, (data) => {
+        console.log(data);
+        //const allBooks = data.allBooks;
+        return {
+          allBooks: data.allBooks.concat(addedBook),
+        };
+      });
+      client.cache.updateQuery(
+        { query: ALL_BOOKS, variables: { genre: "" } },
+        (data) => {
+          console.log(data);
+          return {
+            allBooks: data.allBooks.concat(addedBook),
+          };
+        }
+      );
     },
   });
 
