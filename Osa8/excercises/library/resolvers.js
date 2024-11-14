@@ -8,10 +8,9 @@ const User = require("./Models/User");
 
 const resolvers = {
   Author: {
-    bookCount: async ({ _id }) => {
-      console.log(_id);
-      const booklist = await Book.find({ author: _id });
-      return booklist.length;
+    bookCount: async ({ books }) => {
+      console.log("book.find");
+      return books.length;
     },
   },
   Query: {
@@ -61,6 +60,7 @@ const resolvers = {
       author.born === null
         ? (author.born = parseInt(args.born))
         : (author.born = null);
+      author.books = [];
       try {
         console.log(author);
         await author.save();
@@ -103,14 +103,16 @@ const resolvers = {
           },
         });
       }
+      var author; //placeholder, if new author added
       const authorDefined = await Author.findOne({ name: args.author });
       console.log(authorDefined);
       if (!authorDefined) {
-        const author = new Author({ name: args.author, born: null });
+        author = new Author({ name: args.author, born: null, books: [] });
         console.log(author);
         try {
           await author.save();
         } catch (error) {
+          console.log(error);
           if (error.name === "ValidationError") {
             if (error.errors.name.kind === "unique") {
               throw new GraphQLError("Author should be unique", {
@@ -152,11 +154,22 @@ const resolvers = {
         : (newBook.published = null);
       authorDefined
         ? (newBook.author = authorDefined)
-        : (newBook.author = await Author.findOne({ name: args.author }));
+        : (newBook.author = author);
       try {
         console.log(newBook);
         await newBook.save();
+        if (authorDefined) {
+          if (authorDefined.books) {
+            authorDefined.books.push(newBook._id);
+          } else authorDefined.books = [newBook.id];
+          console.log(authorDefined);
+          await authorDefined.save();
+        } else {
+          author.books.push(newBook);
+          await author.save();
+        }
       } catch (error) {
+        console.log(error);
         if (error.name === "ValidationError") {
           if (error.errors.name.kind === "unique") {
             throw new GraphQLError("Title should be unique", {
@@ -259,6 +272,7 @@ const resolvers = {
       });
     },
     login: async (root, args) => {
+      console.log("logging in");
       const user = await User.findOne({ username: args.username });
 
       if (!user || args.password !== "secret") {

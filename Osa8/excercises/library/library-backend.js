@@ -9,6 +9,7 @@ const cors = require("cors");
 const http = require("http");
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", false);
+mongoose.set("debug", true);
 const jwt = require("jsonwebtoken");
 const { WebSocketServer } = require("ws");
 const { useServer } = require("graphql-ws/lib/use/ws");
